@@ -1,0 +1,26 @@
+{
+  "name": "mooncake",
+  "version": "1.0.0",
+  "description": "Mooncake order backend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "echo \"No tests configured\""
+  },
+  "engines": {
+    "node": "22.x"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.17.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "moment": "^2.30.1",
+    "mongoose": "^9.6.3",
+    "qs": "^6.15.2"
+  }
+}

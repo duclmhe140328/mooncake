@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Madame Hương - Quản Trị Đơn Hàng</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #0a0a0a;
+            --bg-surface: #141414;
+            --bg-soft: #1c1c1c;
+            --gold-main: #d4af37;
+            --gold-light: #f7e7a6;
+            --gold-dark: #967315;
+            --red-wine: #6b0b1a;
+            --border-gold: rgba(212, 175, 55, 0.3);
+            --text-main: #e0e0e0;
+            --text-muted: #8f8f8f;
+            --danger: #ff6b6b;
+            --success: #43d17a;
+            --blue: #2f80ed;
+            --paper: #fffaf0;
+            --paper-line: #eadcb5;
+            --ink: #1f1f1f;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            background-image:
+                radial-gradient(circle at 10% 0%, rgba(212, 175, 55, 0.07), transparent 28%),
+                radial-gradient(circle at 90% 20%, rgba(107, 11, 26, 0.16), transparent 30%),
+                linear-gradient(180deg, #090909 0%, #121212 100%);
+        }
+
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        .header {
+            background: rgba(17, 17, 17, 0.9);
+            border-bottom: 1px solid var(--border-gold);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+        }
+
+        .header h1 {
+            margin: 0;
+            color: var(--gold-main);
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .container {
+            max-width: 1360px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .panel {
+            background: linear-gradient(180deg, rgba(20, 20, 20, 0.98), rgba(12, 12, 12, 0.98));
+            border: 1px solid var(--border-gold);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .panel::before {
+            content: '';
+            position: absolute;
+            inset: 10px;
+            border: 1px solid rgba(212, 175, 55, 0.08);
+            pointer-events: none;
+            border-radius: 8px;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .panel-header h2 {
+            margin: 0;
+            font-size: 20px;
+            color: #fff;
+        }
+
+        .btn-refresh,
+        .btn-outline,
+        .btn-print,
+        .btn-dark,
+        .btn-danger {
+            border: none;
+            padding: 11px 18px;
+            cursor: pointer;
+            font-weight: 700;
+            border-radius: 6px;
+            transition: 0.25s ease;
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 0.2px;
+        }
+
+        .btn-refresh,
+        .btn-print {
+            background: linear-gradient(135deg, #b98a1e, #ffe889, #bc8b20);
+            color: #111;
+            box-shadow: 0 8px 24px rgba(212, 175, 55, 0.24);
+        }
+
+        .btn-refresh:hover,
+        .btn-print:hover {
+            filter: brightness(1.08);
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--gold-main);
+            color: var(--gold-main);
+            padding: 8px 12px;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .btn-outline:hover {
+            background: var(--gold-main);
+            color: #111;
+        }
+
+        .btn-dark {
+            background: #111;
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+        }
+
+        .btn-dark:hover {
+            border-color: var(--gold-main);
+            color: var(--gold-light);
+        }
+
+        .btn-danger {
+            background: rgba(255, 107, 107, 0.12);
+            color: #ffb4b4;
+            border: 1px solid rgba(255, 107, 107, 0.35);
+        }
+
+        .btn-danger:hover {
+            background: rgba(255, 107, 107, 0.22);
+        }
+
+        .table-shell {
+            overflow-x: auto;
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 8px;
+        }
+
+        table.admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            min-width: 980px;
+            background: rgba(0, 0, 0, 0.08);
+        }
+
+        .admin-table th {
+            color: var(--gold-main);
+            padding: 15px;
+            border-bottom: 1px solid var(--border-gold);
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .admin-table td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 14px;
+            vertical-align: top;
+        }
+
+        .admin-table tr:hover td {
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        .price {
+            color: var(--gold-main);
+            font-weight: 700;
+        }
+
+        .text-muted {
+            color: var(--text-muted);
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .badge {
+            padding: 5px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .badge-method-cod {
+            background: #444;
+            color: #fff;
+        }
+
+        .badge-method-vnpay {
+            background: #005A9E;
+            color: #fff;
+        }
+
+        .badge-status-new {
+            background: rgba(107, 11, 26, 0.92);
+            color: #fff;
+        }
+
+        .badge-status-paid {
+            background: rgba(21, 87, 36, 0.9);
+            color: #d4edda;
+        }
+
+        .badge-status-failed {
+            background: rgba(114, 28, 36, 0.95);
+            color: #f8d7da;
+        }
+
+        .action-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        /* =========================
+           MODAL HÓA ĐƠN ADMIN
+        ========================= */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.76);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+            padding: 22px;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        .bill-modal-wrap {
+            width: min(1180px, 100%);
+            margin: 20px auto;
+            display: grid;
+            grid-template-columns: 320px minmax(0, 1fr);
+            gap: 18px;
+            align-items: start;
+        }
+
+        .bill-tools,
+        .bill-preview-card {
+            background: #111;
+            border: 1px solid var(--border-gold);
+            border-radius: 12px;
+            box-shadow: 0 24px 70px rgba(0, 0, 0, 0.65);
+        }
+
+        .bill-tools {
+            padding: 18px;
+            position: sticky;
+            top: 18px;
+        }
+
+        .bill-tools h3 {
+            margin: 0 0 14px;
+            color: var(--gold-main);
+            font-size: 18px;
+            letter-spacing: 0.5px;
+        }
+
+        .tool-note {
+            color: #aaa;
+            font-size: 12px;
+            line-height: 1.6;
+            margin-bottom: 14px;
+            padding: 10px;
+            border-radius: 8px;
+            background: rgba(212, 175, 55, 0.07);
+            border: 1px solid rgba(212, 175, 55, 0.14);
+        }
+
+        .tool-row {
+            display: grid;
+            gap: 7px;
+            margin-bottom: 12px;
+        }
+
+        .tool-row label {
+            color: #c6c6c6;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .tool-row input,
+        .tool-row select,
+        .tool-row textarea {
+            width: 100%;
+            background: #070707;
+            color: #f2f2f2;
+            border: 1px solid rgba(212, 175, 55, 0.22);
+            padding: 10px 11px;
+            border-radius: 6px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .tool-row input:focus,
+        .tool-row select:focus,
+        .tool-row textarea:focus {
+            border-color: var(--gold-main);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.12);
+        }
+
+        .tool-row textarea {
+            min-height: 64px;
+            resize: vertical;
+        }
+
+        .switch-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 11px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            margin-bottom: 12px;
+        }
+
+        .switch-row span {
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .switch-row input {
+            transform: scale(1.25);
+            accent-color: var(--gold-main);
+        }
+
+        .tool-buttons {
+            display: grid;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .bill-preview-card {
+            padding: 18px;
+            background: #202020;
+        }
+
+        .close-modal-x {
+            position: fixed;
+            top: 20px;
+            right: 24px;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.72);
+            border: 1px solid var(--gold-main);
+            color: var(--gold-main);
+            font-size: 24px;
+            line-height: 38px;
+            text-align: center;
+            cursor: pointer;
+            z-index: 2200;
+            transition: 0.25s;
+        }
+
+        .close-modal-x:hover {
+            background: var(--gold-main);
+            color: #111;
+            transform: rotate(90deg);
+        }
+
+        /* =========================
+           TEMPLATE IN HÓA ĐƠN A4
+        ========================= */
+        #print-area {
+            width: 210mm;
+            min-height: 297mm;
+            margin: 0 auto;
+            background: var(--paper);
+            color: var(--ink);
+            padding: 13mm 13mm 11mm;
+            border-radius: 6px;
+            box-shadow: 0 16px 50px rgba(0, 0, 0, 0.35);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #print-area::before {
+            content: '';
+            position: absolute;
+            inset: 6mm;
+            border: 1px solid rgba(143, 105, 13, 0.22);
+            pointer-events: none;
+        }
+
+        #print-area::after {
+            content: 'MADAME HUONG';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%) rotate(-28deg);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 72px;
+            font-weight: 700;
+            letter-spacing: 8px;
+            color: rgba(150, 115, 21, 0.045);
+            white-space: nowrap;
+            pointer-events: none;
+        }
+
+        .invoice-inner {
+            position: relative;
+            z-index: 1;
+        }
+
+        .invoice-topline {
+            display: flex;
+            justify-content: space-between;
+            gap: 18px;
+            align-items: flex-start;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #8f690d;
+        }
+
+        .seller-brand {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .logo-mark {
+            width: 54px;
+            height: 54px;
+            border: 2px solid #8f690d;
+            display: grid;
+            place-items: center;
+            color: #8f690d;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.16), transparent);
+        }
+
+        .seller-info h2 {
+            margin: 0;
+            font-size: 17px;
+            color: #5f0813;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .seller-info p {
+            margin: 3px 0;
+            font-size: 10.5px;
+            line-height: 1.45;
+            color: #333;
+        }
+
+        .invoice-meta {
+            min-width: 190px;
+            border: 1px solid #d7c28a;
+            border-radius: 8px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.42);
+        }
+
+        .invoice-meta div {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 6px 9px;
+            border-bottom: 1px solid #eadcb5;
+            font-size: 10.5px;
+        }
+
+        .invoice-meta div:last-child {
+            border-bottom: none;
+        }
+
+        .invoice-meta b {
+            color: #5f0813;
+        }
+
+        .invoice-title {
+            text-align: center;
+            padding: 16px 0 11px;
+        }
+
+        .invoice-title h1 {
+            margin: 0;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 32px;
+            color: #5f0813;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            line-height: 1.05;
+        }
+
+        .invoice-title p {
+            margin: 7px 0 0;
+            font-size: 11px;
+            color: #655338;
+            letter-spacing: 0.7px;
+            text-transform: uppercase;
+        }
+
+        .invoice-status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: 999px;
+            background: #f5ead0;
+            border: 1px solid #dfc47f;
+            color: #6a4b0c;
+            font-size: 10px;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+
+        .invoice-section {
+            border: 1px solid #d9c287;
+            border-radius: 8px;
+            margin-top: 10px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.32);
+        }
+
+        .invoice-section-title {
+            background: linear-gradient(90deg, #5f0813, #7d1422);
+            color: #fff8df;
+            padding: 7px 10px;
+            font-size: 10.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .invoice-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+
+        .invoice-cell {
+            padding: 7px 10px;
+            border-top: 1px solid #eadcb5;
+            min-height: 29px;
+            font-size: 11px;
+            line-height: 1.45;
+        }
+
+        .invoice-cell.full {
+            grid-column: 1 / -1;
+        }
+
+        .invoice-cell:nth-child(odd) {
+            border-right: 1px solid #eadcb5;
+        }
+
+        .invoice-cell label {
+            color: #7a6a4d;
+            font-weight: 700;
+            margin-right: 5px;
+        }
+
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 10.5px;
+            overflow: hidden;
+            border: 1px solid #d7c28a;
+        }
+
+        .invoice-table th {
+            background: #5f0813;
+            color: #fff8df;
+            padding: 8px 6px;
+            border-right: 1px solid rgba(255, 255, 255, 0.24);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 9.5px;
+            letter-spacing: 0.4px;
+            text-align: center;
+        }
+
+        .invoice-table th:last-child,
+        .invoice-table td:last-child {
+            border-right: none;
+        }
+
+        .invoice-table td {
+            padding: 8px 6px;
+            border-right: 1px solid #eadcb5;
+            border-bottom: 1px solid #eadcb5;
+            vertical-align: top;
+            color: #252525;
+        }
+
+        .invoice-table tbody tr:nth-child(even) td {
+            background: rgba(255, 255, 255, 0.36);
+        }
+
+        .invoice-table .center {
+            text-align: center;
+        }
+
+        .invoice-table .right {
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        .invoice-summary {
+            display: grid;
+            grid-template-columns: 1fr 270px;
+            gap: 14px;
+            align-items: start;
+            margin-top: 12px;
+        }
+
+        .amount-words {
+            border: 1px solid #d7c28a;
+            border-radius: 8px;
+            padding: 10px 12px;
+            min-height: 88px;
+            background: rgba(255, 255, 255, 0.32);
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .amount-words b {
+            color: #5f0813;
+        }
+
+        .summary-table {
+            border: 1px solid #d7c28a;
+            border-radius: 8px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.38);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 8px 10px;
+            border-bottom: 1px solid #eadcb5;
+            font-size: 11px;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        .summary-row.total {
+            background: linear-gradient(90deg, #5f0813, #7d1422);
+            color: #fff8df;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .payment-note {
+            margin-top: 10px;
+            border: 1px dashed #bc9a34;
+            padding: 9px 11px;
+            border-radius: 8px;
+            color: #4e4025;
+            font-size: 10.5px;
+            line-height: 1.55;
+            background: rgba(255, 255, 255, 0.23);
+        }
+
+        .signature-area {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .signature-box {
+            text-align: center;
+            min-height: 88px;
+            border-top: 1px solid #bda45c;
+            padding-top: 8px;
+            font-size: 10.5px;
+            color: #4b402a;
+        }
+
+        .signature-box b {
+            display: block;
+            color: #5f0813;
+            margin-bottom: 3px;
+            text-transform: uppercase;
+            font-size: 10.5px;
+        }
+
+        .signature-box span {
+            font-size: 9px;
+            color: #7b6a4b;
+        }
+
+        .invoice-footer {
+            margin-top: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 14px;
+            border-top: 1px solid #d7c28a;
+            padding-top: 9px;
+            font-size: 9.4px;
+            color: #6d5d42;
+        }
+
+        .fake-qr {
+            width: 58px;
+            height: 58px;
+            border: 1px solid #9a7b25;
+            background:
+                linear-gradient(90deg, #5f0813 50%, transparent 50%) 0 0/10px 10px,
+                linear-gradient(#5f0813 50%, transparent 50%) 0 0/10px 10px,
+                #fff7df;
+            opacity: 0.72;
+        }
+
+        .vat-hidden .vat-only {
+            display: none !important;
+        }
+
+        @media (max-width: 1000px) {
+            .bill-modal-wrap {
+                grid-template-columns: 1fr;
+            }
+
+            .bill-tools {
+                position: static;
+            }
+
+            #print-area {
+                width: 100%;
+                min-height: auto;
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .header {
+                padding: 16px 20px;
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 6px;
+            }
+
+            .panel {
+                padding: 18px;
+            }
+
+            .panel-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .invoice-topline,
+            .invoice-summary,
+            .signature-area,
+            .invoice-footer {
+                grid-template-columns: 1fr;
+                display: grid;
+            }
+
+            .invoice-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .invoice-cell:nth-child(odd) {
+                border-right: none;
+            }
+        }
+
+        @page {
+            size: A4;
+            margin: 8mm;
+        }
+
+        @media print {
+            html,
+            body {
+                background: #fff !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            body * {
+                visibility: hidden !important;
+            }
+
+            #print-area,
+            #print-area * {
+                visibility: visible !important;
+            }
+
+            #print-area {
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 100% !important;
+                min-height: auto !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                background: #fffaf0 !important;
+            }
+
+            #print-area::before {
+                inset: 0 !important;
+            }
+
+            .modal-overlay,
+            .modal-overlay.active,
+            .bill-preview-card {
+                display: block !important;
+                position: static !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                background: transparent !important;
+                border: none !important;
+                box-shadow: none !important;
+                overflow: visible !important;
+            }
+
+            .bill-tools,
+            .close-modal-x,
+            .header,
+            .container,
+            .btn-print,
+            .btn-dark,
+            .btn-danger {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>Admin Panel</h1>
+        <span style="font-size: 13px; color: #888;">Hệ thống quản lý đơn hàng & in hóa đơn VAT</span>
+    </div>
+
+    <div class="container">
+        <div class="panel">
+            <div class="panel-header">
+                <div>
+                    <h2>Danh Sách Đơn Đặt Hàng Gần Đây</h2>
+                    <div class="text-muted" style="margin-top: 6px;">Bấm “In / VAT” để xem mẫu hóa đơn đẹp, chỉnh thông tin xuất VAT rồi in.</div>
+                </div>
+                <button class="btn-refresh" onclick="loadOrders()">Làm mới dữ liệu</button>
+            </div>
+
+            <div class="table-shell">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Mã Đơn / Ngày</th>
+                            <th>Khách Hàng</th>
+                            <th>Sản Phẩm</th>
+                            <th>Tổng Tiền</th>
+                            <th>Thanh Toán</th>
+                            <th>Trạng Thái</th>
+                            <th style="text-align: right;">Hành Động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orders-table-body">
+                        <tr>
+                            <td colspan="7" style="text-align:center;">Đang tải dữ liệu...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal in hóa đơn VAT -->
+    <div id="bill-modal" class="modal-overlay" onclick="closeBillByBackdrop(event)">
+        <button class="close-modal-x" onclick="closeBill()" title="Đóng">&times;</button>
+
+        <div class="bill-modal-wrap">
+            <aside class="bill-tools" onclick="event.stopPropagation()">
+                <h3>Thiết lập hóa đơn</h3>
+                <div class="tool-note">
+                    Mẫu này dùng để in phiếu bán hàng/VAT từ admin. Muốn thành hóa đơn điện tử hợp lệ thì cần tích hợp thêm nhà cung cấp HĐĐT hoặc API hóa đơn đã đăng ký.
+                </div>
+
+                <div class="switch-row">
+                    <span>Xuất VAT cho khách</span>
+                    <input type="checkbox" id="vat-enabled" checked onchange="renderCurrentBill()">
+                </div>
+
+                <div class="tool-row">
+                    <label>Thuế suất VAT</label>
+                    <select id="vat-rate" onchange="renderCurrentBill()">
+                        <option value="8" selected>8%</option>
+                        <option value="10">10%</option>
+                        <option value="5">5%</option>
+                        <option value="0">0%</option>
+                    </select>
+                </div>
+
+                <div class="tool-row">
+                    <label>Tên công ty/người mua để xuất VAT</label>
+                    <input id="buyer-company" type="text" placeholder="VD: CÔNG TY TNHH ABC" oninput="renderCurrentBill()">
+                </div>
+
+                <div class="tool-row">
+                    <label>Mã số thuế bên mua</label>
+                    <input id="buyer-tax" type="text" placeholder="Nhập MST khách cần xuất VAT" oninput="renderCurrentBill()">
+                </div>
+
+                <div class="tool-row">
+                    <label>Email nhận hóa đơn</label>
+                    <input id="buyer-email" type="email" placeholder="email@congty.com" oninput="renderCurrentBill()">
+                </div>
+
+                <div class="tool-row">
+                    <label>Địa chỉ xuất VAT</label>
+                    <textarea id="buyer-vat-address" placeholder="Địa chỉ theo đăng ký thuế của khách" oninput="renderCurrentBill()"></textarea>
+                </div>
+
+                <div class="tool-row">
+                    <label>Ghi chú trên hóa đơn</label>
+                    <textarea id="invoice-note" placeholder="VD: Giá đã bao gồm VAT, giao hàng trong ngày..." oninput="renderCurrentBill()">Giá bán đã bao gồm thuế VAT theo thuế suất đã chọn.</textarea>
+                </div>
+
+                <div class="tool-buttons">
+                    <button class="btn-print" onclick="window.print()">In Hóa Đơn</button>
+                    <button class="btn-dark" onclick="renderCurrentBill()">Cập nhật bản xem trước</button>
+                    <button class="btn-danger" onclick="closeBill()">Đóng</button>
+                </div>
+            </aside>
+
+            <main class="bill-preview-card" onclick="event.stopPropagation()">
+                <div id="print-area"></div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        /* =============================
+           THÔNG TIN NGƯỜI BÁN
+           Sửa các dòng dưới theo thông tin doanh nghiệp thật của bạn.
+        ============================= */
+        const SELLER_INFO = {
+            companyName: 'CÔNG TY TNHH TM VÀ DV BÁNH TRUNG THU MADAME HƯƠNG',
+            brandName: 'MADAME HƯƠNG',
+            taxCode: 'ĐIỀN MÃ SỐ THUẾ CỦA CÔNG TY',
+            address: '39 Lý Thường Kiệt, Hoàn Kiếm, Hà Nội',
+            phone: '08 1800 6466',
+            website: 'www.madamehuong.net',
+            email: 'contact@madamehuong.net',
+            bankInfo: 'Ngân hàng: ........................................ | STK: ........................................ | Chủ TK: ........................................'
+        };
+
+        let ordersCache = [];
+        let currentBillOrder = null;
+
+        function escapeHtml(value) {
+            return String(value ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function safeNumber(value) {
+            const n = Number(value);
+            return Number.isFinite(n) ? n : 0;
+        }
+
+        function formatMoney(value) {
+            return Math.round(safeNumber(value)).toLocaleString('vi-VN') + ' đ';
+        }
+
+        function getShortId(order) {
+            return String(order?.orderCode || '000000').toUpperCase();
+        }
+
+        function formatDateTime(value) {
+            const d = value ? new Date(value) : new Date();
+            if (Number.isNaN(d.getTime())) return new Date().toLocaleString('vi-VN');
+            return d.toLocaleString('vi-VN');
+        }
+
+        async function loadOrders() {
+            const tbody = document.getElementById('orders-table-body');
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Đang tải dữ liệu...</td></tr>';
+
+            try {
+                const response = await fetch('/api/orders');
+                const data = await response.json();
+
+                if (!data.success) {
+                    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color: #ff8b8b;">API trả về lỗi. Vui lòng kiểm tra Backend.</td></tr>';
+                    return;
+                }
+
+                ordersCache = Array.isArray(data.orders) ? data.orders : [];
+
+                if (ordersCache.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color: #888;">Chưa có đơn hàng nào.</td></tr>';
+                    return;
+                }
+
+                let html = '';
+                ordersCache.forEach(order => {
+                    const date = formatDateTime(order.createdAt);
+                    const products = Array.isArray(order.products) ? order.products : [];
+                    const productsList = products.map(p => {
+                        const name = escapeHtml(p.name || 'Sản phẩm');
+                        const qty = safeNumber(p.quantity || 1);
+                        const price = formatMoney(p.price || 0);
+                        return `• ${name} <span class="text-muted">(SL: ${qty} × ${price})</span>`;
+                    }).join('<br>');
+
+                    const methodBadge = order.paymentMethod === 'VNPAY' ? 'badge-method-vnpay' : 'badge-method-cod';
+                    let statusBadge = 'badge-status-new';
+                    if (order.paymentStatus === 'PAID') statusBadge = 'badge-status-paid';
+                    if (order.paymentStatus === 'FAILED') statusBadge = 'badge-status-failed';
+
+                    const shortId = getShortId(order);
+                    const statusText = order.paymentStatus === 'PENDING' ? (order.orderStatus || 'NEW') : (order.paymentStatus || 'NEW');
+
+                    html += `
+                        <tr>
+                            <td>
+                                <strong>#${shortId}</strong><br>
+                                <span class="text-muted">${escapeHtml(date)}</span>
+                            </td>
+                            <td>
+                                <strong>${escapeHtml(order.customerName || 'Khách lẻ')}</strong><br>
+                                ${escapeHtml(order.phone || '')}<br>
+                                <span class="text-muted">${escapeHtml(order.address || '')}</span>
+                            </td>
+                            <td>${productsList || '<span class="text-muted">Không có sản phẩm</span>'}</td>
+                            <td class="price">${formatMoney(order.totalAmount)}</td>
+                            <td><span class="badge ${methodBadge}">${escapeHtml(order.paymentMethod || 'COD')}</span></td>
+                            <td><span class="badge ${statusBadge}">${escapeHtml(statusText)}</span></td>
+                            <td style="text-align: right;">
+                                <div class="action-group" style="justify-content:flex-end;">
+                                    <button class="btn-outline" onclick="openBillById('${escapeHtml(String(order._id || ''))}', true)">In / VAT</button>
+                                    <button class="btn-outline" onclick="openBillById('${escapeHtml(String(order._id || ''))}', false)">In thường</button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                tbody.innerHTML = html;
+            } catch (error) {
+                console.error(error);
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color: #ff4d4d;">Lỗi kết nối đến máy chủ. Vui lòng kiểm tra lại Backend.</td></tr>';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadOrders);
+
+        function openBillById(orderId, enableVat = true) {
+            const order = ordersCache.find(item => String(item._id) === String(orderId));
+            if (!order) {
+                alert('Không tìm thấy đơn hàng để in. Bạn hãy bấm Làm mới dữ liệu rồi thử lại.');
+                return;
+            }
+
+            currentBillOrder = order;
+
+            document.getElementById('vat-enabled').checked = !!enableVat;
+            document.getElementById('buyer-company').value = '';
+            document.getElementById('buyer-tax').value = '';
+            document.getElementById('buyer-email').value = '';
+            document.getElementById('buyer-vat-address').value = order.address || '';
+            document.getElementById('invoice-note').value = 'Giá bán đã bao gồm thuế VAT theo thuế suất đã chọn.';
+
+            renderCurrentBill();
+            document.getElementById('bill-modal').classList.add('active');
+            document.body.classList.add('modal-open');
+        }
+
+        function closeBill() {
+            document.getElementById('bill-modal').classList.remove('active');
+            document.body.classList.remove('modal-open');
+        }
+
+        function closeBillByBackdrop(event) {
+            if (event.target.id === 'bill-modal') closeBill();
+        }
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') closeBill();
+        });
+
+        function renderCurrentBill() {
+            if (!currentBillOrder) return;
+
+            const vatEnabled = document.getElementById('vat-enabled').checked;
+            const vatRate = safeNumber(document.getElementById('vat-rate').value);
+            const buyerCompany = document.getElementById('buyer-company').value.trim();
+            const buyerTax = document.getElementById('buyer-tax').value.trim();
+            const buyerEmail = document.getElementById('buyer-email').value.trim();
+            const buyerVatAddress = document.getElementById('buyer-vat-address').value.trim();
+            const invoiceNote = document.getElementById('invoice-note').value.trim();
+
+            const order = currentBillOrder;
+            const products = Array.isArray(order.products) ? order.products : [];
+            const shortId = getShortId(order);
+            const orderDate = formatDateTime(order.createdAt);
+            const printDate = new Date().toLocaleString('vi-VN');
+            const totalGross = safeNumber(order.totalAmount) || products.reduce((sum, p) => sum + safeNumber(p.price) * safeNumber(p.quantity || 1), 0);
+            const divisor = vatEnabled ? (1 + vatRate / 100) : 1;
+            const totalBeforeVat = vatEnabled ? totalGross / divisor : totalGross;
+            const vatAmount = vatEnabled ? totalGross - totalBeforeVat : 0;
+
+            const rowsHtml = products.map((p, index) => {
+                const qty = safeNumber(p.quantity || 1);
+                const grossUnit = safeNumber(p.price || 0);
+                const grossLine = grossUnit * qty;
+                const unitBeforeVat = vatEnabled ? grossUnit / divisor : grossUnit;
+                const lineBeforeVat = unitBeforeVat * qty;
+                const lineVat = grossLine - lineBeforeVat;
+                const productCode = escapeHtml(p.productId || p.code || '');
+
+                return `
+                    <tr>
+                        <td class="center">${index + 1}</td>
+                        <td>
+                            <b>${escapeHtml(p.name || 'Sản phẩm')}</b>
+                            ${productCode ? `<br><span style="color:#76684e; font-size:9px;">Mã hàng: ${productCode}</span>` : ''}
+                        </td>
+                        <td class="center">Cái</td>
+                        <td class="center">${qty}</td>
+                        <td class="right">${formatMoney(unitBeforeVat)}</td>
+                        <td class="right vat-only">${vatRate}%</td>
+                        <td class="right vat-only">${formatMoney(lineVat)}</td>
+                        <td class="right"><b>${formatMoney(vatEnabled ? lineBeforeVat : grossLine)}</b></td>
+                    </tr>
+                `;
+            }).join('');
+
+            const buyerDisplayName = buyerCompany || order.customerName || 'Khách lẻ';
+            const buyerDisplayAddress = buyerVatAddress || order.address || '';
+            const invoiceType = vatEnabled ? 'HÓA ĐƠN BÁN HÀNG KIÊM THÔNG TIN VAT' : 'HÓA ĐƠN BÁN HÀNG';
+            const invoiceSub = vatEnabled ? 'Bản in phục vụ đối soát đơn hàng và thông tin xuất VAT' : 'Bản in phiếu bán hàng từ hệ thống admin';
+            const amountText = numberToVietnameseWords(Math.round(totalGross));
+
+            const printArea = document.getElementById('print-area');
+            printArea.className = vatEnabled ? '' : 'vat-hidden';
+            printArea.innerHTML = `
+                <div class="invoice-inner">
+                    <div class="invoice-topline">
+                        <div class="seller-brand">
+                            <div class="logo-mark">MH</div>
+                            <div class="seller-info">
+                                <h2>${escapeHtml(SELLER_INFO.companyName)}</h2>
+                                <p><b>Thương hiệu:</b> ${escapeHtml(SELLER_INFO.brandName)}</p>
+                                <p><b>MST:</b> ${escapeHtml(SELLER_INFO.taxCode)}</p>
+                                <p><b>Địa chỉ:</b> ${escapeHtml(SELLER_INFO.address)}</p>
+                                <p><b>Hotline:</b> ${escapeHtml(SELLER_INFO.phone)} &nbsp; | &nbsp; <b>Website:</b> ${escapeHtml(SELLER_INFO.website)}</p>
+                            </div>
+                        </div>
+
+                        <div class="invoice-meta">
+                            <div><span>Số phiếu</span><b>#${shortId}</b></div>
+                            <div><span>Ngày đặt</span><b>${escapeHtml(orderDate)}</b></div>
+                            <div><span>Ngày in</span><b>${escapeHtml(printDate)}</b></div>
+                            <div><span>Thanh toán</span><b>${escapeHtml(order.paymentMethod || 'COD')}</b></div>
+                        </div>
+                    </div>
+
+                    <div class="invoice-title">
+                        <h1>${invoiceType}</h1>
+                        <p>${invoiceSub}</p>
+                        <span class="invoice-status-pill">Mã đơn: #${shortId} · Trạng thái: ${escapeHtml(order.paymentStatus || order.orderStatus || 'PENDING')}</span>
+                    </div>
+
+                    <div class="invoice-section">
+                        <div class="invoice-section-title">Thông tin người mua</div>
+                        <div class="invoice-grid">
+                            <div class="invoice-cell"><label>Khách hàng:</label>${escapeHtml(order.customerName || 'Khách lẻ')}</div>
+                            <div class="invoice-cell"><label>SĐT:</label>${escapeHtml(order.phone || '')}</div>
+                            <div class="invoice-cell full"><label>Địa chỉ giao hàng:</label>${escapeHtml(order.address || '')}</div>
+                            <div class="invoice-cell vat-only"><label>Tên đơn vị xuất VAT:</label>${escapeHtml(buyerDisplayName)}</div>
+                            <div class="invoice-cell vat-only"><label>Mã số thuế:</label>${escapeHtml(buyerTax || '................................')}</div>
+                            <div class="invoice-cell full vat-only"><label>Địa chỉ xuất VAT:</label>${escapeHtml(buyerDisplayAddress || '................................')}</div>
+                            <div class="invoice-cell full vat-only"><label>Email nhận hóa đơn:</label>${escapeHtml(buyerEmail || '................................')}</div>
+                        </div>
+                    </div>
+
+                    <table class="invoice-table">
+                        <thead>
+                            <tr>
+                                <th style="width:34px;">STT</th>
+                                <th>Tên hàng hóa / Dịch vụ</th>
+                                <th style="width:48px;">ĐVT</th>
+                                <th style="width:46px;">SL</th>
+                                <th style="width:90px;">Đơn giá</th>
+                                <th class="vat-only" style="width:58px;">VAT</th>
+                                <th class="vat-only" style="width:90px;">Tiền VAT</th>
+                                <th style="width:105px;">Thành tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${rowsHtml || '<tr><td colspan="8" class="center">Không có sản phẩm</td></tr>'}
+                        </tbody>
+                    </table>
+
+                    <div class="invoice-summary">
+                        <div>
+                            <div class="amount-words">
+                                <b>Số tiền viết bằng chữ:</b><br>
+                                ${escapeHtml(amountText)} đồng.
+                            </div>
+                            <div class="payment-note">
+                                <b>Thông tin thanh toán:</b> ${escapeHtml(SELLER_INFO.bankInfo)}<br>
+                                <b>Ghi chú:</b> ${escapeHtml(invoiceNote || 'Không có ghi chú.')}
+                            </div>
+                        </div>
+
+                        <div class="summary-table">
+                            <div class="summary-row">
+                                <span>Cộng tiền hàng</span>
+                                <b>${formatMoney(totalBeforeVat)}</b>
+                            </div>
+                            <div class="summary-row vat-only">
+                                <span>Thuế GTGT (${vatRate}%)</span>
+                                <b>${formatMoney(vatAmount)}</b>
+                            </div>
+                            <div class="summary-row total">
+                                <span>Tổng thanh toán</span>
+                                <b>${formatMoney(totalGross)}</b>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="signature-area">
+                        <div class="signature-box">
+                            <b>Người mua hàng</b>
+                            <span>Ký, ghi rõ họ tên</span>
+                        </div>
+                        <div class="signature-box">
+                            <b>Người bán hàng</b>
+                            <span>Ký, ghi rõ họ tên</span>
+                        </div>
+                        <div class="signature-box">
+                            <b>Kế toán / Thu ngân</b>
+                            <span>Ký, ghi rõ họ tên</span>
+                        </div>
+                    </div>
+
+                    <div class="invoice-footer">
+                        <div>
+                            <b>Lưu ý:</b> Bản in này dùng để lưu nội bộ/đối soát đơn hàng. Khi xuất VAT chính thức cần phát hành hóa đơn điện tử theo hệ thống HĐĐT của doanh nghiệp.<br>
+                            Cảm ơn Quý khách đã tin tưởng Madame Hương.
+                        </div>
+                        <div class="fake-qr" title="Mã tra cứu nội bộ"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function numberToVietnameseWords(number) {
+            number = Math.round(Math.abs(safeNumber(number)));
+            if (number === 0) return 'Không';
+
+            const units = ['', 'nghìn', 'triệu', 'tỷ', 'nghìn tỷ', 'triệu tỷ'];
+            const chunks = [];
+            let temp = number;
+
+            while (temp > 0) {
+                chunks.push(temp % 1000);
+                temp = Math.floor(temp / 1000);
+            }
+
+            function readTriple(num, full) {
+                const digitWords = ['không', 'một', 'hai', 'ba', 'bốn', 'năm', 'sáu', 'bảy', 'tám', 'chín'];
+                const hundred = Math.floor(num / 100);
+                const ten = Math.floor((num % 100) / 10);
+                const unit = num % 10;
+                const parts = [];
+
+                if (full || hundred > 0) {
+                    parts.push(digitWords[hundred] + ' trăm');
+                    if (ten === 0 && unit > 0) parts.push('linh');
+                }
+
+                if (ten > 1) {
+                    parts.push(digitWords[ten] + ' mươi');
+                    if (unit === 1) parts.push('mốt');
+                    else if (unit === 5) parts.push('lăm');
+                    else if (unit > 0) parts.push(digitWords[unit]);
+                } else if (ten === 1) {
+                    parts.push('mười');
+                    if (unit === 5) parts.push('lăm');
+                    else if (unit > 0) parts.push(digitWords[unit]);
+                } else if (unit > 0) {
+                    parts.push(digitWords[unit]);
+                }
+
+                return parts.join(' ');
+            }
+
+            let result = [];
+            for (let i = chunks.length - 1; i >= 0; i--) {
+                const chunk = chunks[i];
+                if (chunk === 0) continue;
+                const full = i < chunks.length - 1 && chunk < 100;
+                result.push(readTriple(chunk, full) + (units[i] ? ' ' + units[i] : ''));
+            }
+
+            const text = result.join(' ').replace(/\s+/g, ' ').trim();
+            return text.charAt(0).toUpperCase() + text.slice(1);
+        }
+    </script>
+</body>
+
+</html>
