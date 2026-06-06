@@ -3503,9 +3503,53 @@
                 btnSubmit.style.pointerEvents = "auto";
             }
         }
+        function handleVnpayReturnResult() {
+    const params = new URLSearchParams(window.location.search);
+
+    const paymentStatus = params.get('payment');
+    const orderCode = params.get('orderCode');
+    const message = params.get('message');
+
+    if (!paymentStatus) {
+        return;
+    }
+
+    if (paymentStatus === 'success') {
+        cart = [];
+        saveCart();
+        renderCart();
+        renderCheckoutSummary();
+
+        openOrderSuccess({
+            success: true,
+            orderCode: orderCode || '---',
+            message:
+                message ||
+                'Thanh toán VNPay thành công. Đơn hàng của bạn đã được ghi nhận.'
+        });
+    } else {
+        showToast(
+            message ||
+            'Thanh toán chưa thành công hoặc giao dịch đã bị hủy.'
+        );
+    }
+
+    // Xóa query khỏi thanh địa chỉ để refresh không hiện lại thông báo
+    window.history.replaceState(
+        {},
+        document.title,
+        window.location.pathname
+    );
+}
+
+handleVnpayReturnResult();
+
+updateCartBadge();
+renderCheckoutSummary();
 
         updateCartBadge();
         renderCheckoutSummary();
+        
     </script>
 </body>
 
