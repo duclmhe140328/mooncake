@@ -6,6 +6,7 @@ const path = require('path');
 
 const connectDB = require('./config/db');
 const orderRoutes = require('./routes/orderRoutes');
+const productRoutes = require('./routes/productRoutes');
 
 const app = express();
 
@@ -23,7 +24,13 @@ app.use(
 );
 
 // Nhận dữ liệu JSON
-app.use(express.json());
+
+app.use(express.json({ limit: '30mb' }));
+app.use(express.urlencoded({ extended: true, limit: '30mb' }));
+
+app.use('/api/products', require('./routes/productRoutes'));
+
+app.use('/api/orders', orderRoutes);
 
 // Nhận dữ liệu từ form
 app.use(

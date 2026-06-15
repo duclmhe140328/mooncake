@@ -57,7 +57,11 @@ const orderSchema = new mongoose.Schema(
                 }
             }
         ],
-
+        salesCounted: {
+            type: Boolean,
+            default: false,
+            index: true
+        },
         totalAmount: {
             type: Number,
             required: true,
