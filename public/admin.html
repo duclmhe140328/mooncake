@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Madame Hương - Quản Trị Đơn Hàng</title>
+    <title>Nét Hà Nội - Quản Trị Đơn Hàng</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -897,7 +897,242 @@
                 display: none !important;
             }
         }
-    </style>
+    
+        /* =====================================================
+           V3: BỘ LỌC, PHÂN TRANG, CẬP NHẬT TRẠNG THÁI COD
+        ===================================================== */
+        .admin-toolbar {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: minmax(230px, 1.5fr) repeat(4, minmax(135px, .7fr));
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .admin-toolbar input,
+        .admin-toolbar select,
+        .status-select {
+            width: 100%;
+            min-height: 42px;
+            padding: 0 11px;
+            border: 1px solid rgba(212, 175, 55, 0.24);
+            border-radius: 6px;
+            outline: none;
+            background: #090909;
+            color: #ece4d3;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+        }
+
+        .admin-toolbar input:focus,
+        .admin-toolbar select:focus,
+        .status-select:focus {
+            border-color: var(--gold-main);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.08);
+        }
+
+        .admin-toolbar-actions {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .admin-toolbar-actions-left,
+        .admin-toolbar-actions-right {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+            align-items: center;
+        }
+
+        .admin-result-note {
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        .btn-sync-sales {
+            border: 1px solid rgba(67, 209, 122, 0.45);
+            border-radius: 6px;
+            padding: 10px 14px;
+            cursor: pointer;
+            background: rgba(67, 209, 122, 0.1);
+            color: #8ff0b5;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+        }
+
+        .btn-sync-sales:hover {
+            background: rgba(67, 209, 122, 0.18);
+        }
+
+        table.admin-table {
+            min-width: 1320px;
+        }
+
+        .status-editor {
+            min-width: 150px;
+            display: grid;
+            gap: 7px;
+        }
+
+        .status-editor label {
+            display: grid;
+            gap: 4px;
+            color: #8f8f8f;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .7px;
+            text-transform: uppercase;
+        }
+
+        .status-select {
+            min-height: 34px;
+            padding: 0 8px;
+            font-size: 10px;
+        }
+
+        .status-readonly {
+            min-width: 130px;
+            display: grid;
+            gap: 7px;
+        }
+
+        .badge-status-delivered {
+            background: rgba(27, 110, 67, 0.92);
+            color: #d8ffe8;
+        }
+
+        .badge-status-shipping {
+            background: rgba(47, 128, 237, 0.25);
+            color: #b9d8ff;
+        }
+
+        .badge-status-cancelled {
+            background: rgba(114, 28, 36, 0.9);
+            color: #ffd1d1;
+        }
+
+        .pagination-shell {
+            position: relative;
+            z-index: 2;
+            margin-top: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .pagination-info {
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        .pagination-buttons {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+
+        .page-button {
+            min-width: 36px;
+            height: 36px;
+            border: 1px solid rgba(212, 175, 55, 0.24);
+            border-radius: 6px;
+            cursor: pointer;
+            background: #0b0b0b;
+            color: #d9d1c1;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .page-button.active,
+        .page-button:hover:not(:disabled) {
+            border-color: var(--gold-main);
+            color: #111;
+            background: var(--gold-main);
+        }
+
+        .page-button:disabled {
+            cursor: not-allowed;
+            opacity: .35;
+        }
+
+        .row-saving {
+            opacity: .58;
+            pointer-events: none;
+        }
+
+        .admin-message {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            z-index: 3000;
+            max-width: min(420px, calc(100vw - 36px));
+            padding: 13px 16px;
+            border: 1px solid var(--gold-main);
+            border-radius: 7px;
+            background: rgba(10, 10, 10, .97);
+            color: var(--gold-light);
+            box-shadow: 0 16px 45px rgba(0, 0, 0, .62);
+            opacity: 0;
+            transform: translateY(15px);
+            pointer-events: none;
+            transition: .25s ease;
+            font-size: 12px;
+        }
+
+        .admin-message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .admin-message.error {
+            border-color: var(--danger);
+            color: #ffc2c2;
+        }
+
+        @media (max-width: 1100px) {
+            .admin-toolbar {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .admin-toolbar input {
+                grid-column: 1 / -1;
+            }
+        }
+
+        @media (max-width: 620px) {
+            .admin-toolbar {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-toolbar input {
+                grid-column: auto;
+            }
+
+            .admin-toolbar-actions,
+            .pagination-shell {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .admin-toolbar-actions-left,
+            .admin-toolbar-actions-right {
+                width: 100%;
+            }
+
+            .admin-toolbar-actions button {
+                flex: 1 1 auto;
+            }
+        }
+</style>
 </head>
 
 <body>
@@ -911,10 +1146,64 @@
         <div class="panel">
             <div class="panel-header">
                 <div>
-                    <h2>Danh Sách Đơn Đặt Hàng Gần Đây</h2>
-                    <div class="text-muted" style="margin-top: 6px;">Bấm “In / VAT” để xem mẫu hóa đơn đẹp, chỉnh thông tin xuất VAT rồi in.</div>
+                    <h2>Danh Sách Đơn Đặt Hàng</h2>
+                    <div class="text-muted" style="margin-top: 6px;">
+                        Đơn COD chỉ được tính lượt bán và cho phép đánh giá sau khi chuyển sang “Đã giao / khách đã nhận”.
+                    </div>
                 </div>
-                <button class="btn-refresh" onclick="loadOrders()">Làm mới dữ liệu</button>
+                <button class="btn-refresh" onclick="loadOrders(currentPage)">Làm mới dữ liệu</button>
+            </div>
+
+            <div class="admin-toolbar">
+                <input
+                    id="filter-search"
+                    type="search"
+                    placeholder="Tìm mã đơn, tên khách, SĐT, địa chỉ..."
+                >
+                <select id="filter-payment-method">
+                    <option value="">Mọi phương thức</option>
+                    <option value="COD">COD</option>
+                    <option value="VNPAY">VNPay</option>
+                </select>
+                <select id="filter-payment-status">
+                    <option value="">Mọi thanh toán</option>
+                    <option value="PENDING">Chờ thanh toán</option>
+                    <option value="PAID">Đã thanh toán</option>
+                    <option value="FAILED">Thất bại</option>
+                    <option value="REFUNDED">Đã hoàn tiền</option>
+                </select>
+                <select id="filter-order-status">
+                    <option value="">Mọi trạng thái đơn</option>
+                    <option value="NEW">Đơn mới</option>
+                    <option value="CONFIRMED">Đã xác nhận</option>
+                    <option value="PACKING">Đang đóng gói</option>
+                    <option value="SHIPPING">Đang giao</option>
+                    <option value="DELIVERED">Đã giao / khách nhận</option>
+                    <option value="CANCELLED">Đã hủy</option>
+                </select>
+                <select id="filter-limit">
+                    <option value="10">10 đơn / trang</option>
+                    <option value="20">20 đơn / trang</option>
+                    <option value="30">30 đơn / trang</option>
+                    <option value="50">50 đơn / trang</option>
+                </select>
+            </div>
+
+            <div class="admin-toolbar-actions">
+                <div class="admin-toolbar-actions-left">
+                    <button class="btn-refresh" type="button" onclick="applyFilters()">
+                        Áp dụng bộ lọc
+                    </button>
+                    <button class="btn-dark" type="button" onclick="clearFilters()">
+                        Xóa bộ lọc
+                    </button>
+                </div>
+                <div class="admin-toolbar-actions-right">
+                    <span id="admin-result-note" class="admin-result-note"></span>
+                    <button class="btn-sync-sales" type="button" onclick="rebuildSales()">
+                        Đồng bộ lượt bán
+                    </button>
+                </div>
             </div>
 
             <div class="table-shell">
@@ -925,20 +1214,28 @@
                             <th>Khách Hàng</th>
                             <th>Sản Phẩm</th>
                             <th>Tổng Tiền</th>
+                            <th>Phương Thức</th>
                             <th>Thanh Toán</th>
-                            <th>Trạng Thái</th>
+                            <th>Trạng Thái Đơn</th>
                             <th style="text-align: right;">Hành Động</th>
                         </tr>
                     </thead>
                     <tbody id="orders-table-body">
                         <tr>
-                            <td colspan="7" style="text-align:center;">Đang tải dữ liệu...</td>
+                            <td colspan="8" style="text-align:center;">Đang tải dữ liệu...</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
+
+            <div class="pagination-shell">
+                <div id="pagination-info" class="pagination-info"></div>
+                <div id="pagination-buttons" class="pagination-buttons"></div>
+            </div>
         </div>
     </div>
+
+    <div id="admin-message" class="admin-message" role="status"></div>
 
     <!-- Modal in hóa đơn VAT -->
     <div id="bill-modal" class="modal-overlay" onclick="closeBillByBackdrop(event)">
@@ -1022,6 +1319,29 @@
 
         let ordersCache = [];
         let currentBillOrder = null;
+        let currentPage = 1;
+        let currentPagination = {
+            page: 1,
+            pages: 1,
+            total: 0,
+            limit: 10
+        };
+
+        const PAYMENT_STATUS_LABELS = {
+            PENDING: 'Chờ thanh toán',
+            PAID: 'Đã thanh toán',
+            FAILED: 'Thất bại',
+            REFUNDED: 'Đã hoàn tiền'
+        };
+
+        const ORDER_STATUS_LABELS = {
+            NEW: 'Đơn mới',
+            CONFIRMED: 'Đã xác nhận',
+            PACKING: 'Đang đóng gói',
+            SHIPPING: 'Đang giao',
+            DELIVERED: 'Đã giao / khách đã nhận',
+            CANCELLED: 'Đã hủy'
+        };
 
         function escapeHtml(value) {
             return String(value ?? '')
@@ -1051,78 +1371,320 @@
             return d.toLocaleString('vi-VN');
         }
 
-        async function loadOrders() {
+        function showAdminMessage(message, isError = false) {
+            const element = document.getElementById('admin-message');
+            if (!element) return;
+
+            element.textContent = message;
+            element.classList.toggle('error', Boolean(isError));
+            element.classList.add('show');
+
+            clearTimeout(showAdminMessage.timer);
+            showAdminMessage.timer = setTimeout(() => {
+                element.classList.remove('show');
+            }, 3200);
+        }
+
+        function getFilterQuery(page = 1) {
+            const params = new URLSearchParams({
+                page: String(page),
+                limit: document.getElementById('filter-limit')?.value || '10'
+            });
+
+            const values = {
+                search: document.getElementById('filter-search')?.value.trim(),
+                paymentMethod: document.getElementById('filter-payment-method')?.value,
+                paymentStatus: document.getElementById('filter-payment-status')?.value,
+                orderStatus: document.getElementById('filter-order-status')?.value
+            };
+
+            Object.entries(values).forEach(([key, value]) => {
+                if (value) params.set(key, value);
+            });
+
+            return params.toString();
+        }
+
+        function paymentBadgeClass(status) {
+            const value = String(status || 'PENDING').toUpperCase();
+            if (value === 'PAID') return 'badge-status-paid';
+            if (value === 'FAILED' || value === 'REFUNDED') return 'badge-status-failed';
+            return 'badge-status-new';
+        }
+
+        function orderBadgeClass(status) {
+            const value = String(status || 'NEW').toUpperCase();
+            if (value === 'DELIVERED') return 'badge-status-delivered';
+            if (value === 'SHIPPING') return 'badge-status-shipping';
+            if (value === 'CANCELLED') return 'badge-status-cancelled';
+            if (value === 'CONFIRMED' || value === 'PACKING') return 'badge-status-paid';
+            return 'badge-status-new';
+        }
+
+        function renderStatusOptions(options, selectedValue) {
+            return Object.entries(options).map(([value, label]) => `
+                <option value="${value}" ${value === selectedValue ? 'selected' : ''}>
+                    ${escapeHtml(label)}
+                </option>
+            `).join('');
+        }
+
+        function renderOrderRow(order) {
+            const date = formatDateTime(order.createdAt);
+            const products = Array.isArray(order.products) ? order.products : [];
+            const productsList = products.map(product => {
+                const name = escapeHtml(product.name || 'Sản phẩm');
+                const qty = safeNumber(product.quantity || 1);
+                const price = formatMoney(product.price || 0);
+                return `• ${name} <span class="text-muted">(SL: ${qty} × ${price})</span>`;
+            }).join('<br>');
+
+            const method = String(order.paymentMethod || 'COD').toUpperCase();
+            const paymentStatus = String(order.paymentStatus || 'PENDING').toUpperCase();
+            const orderStatus = String(order.orderStatus || 'NEW').toUpperCase();
+            const methodBadge = method === 'VNPAY' ? 'badge-method-vnpay' : 'badge-method-cod';
+            const shortId = getShortId(order);
+            const orderId = escapeHtml(String(order._id || ''));
+
+            const paymentCell = method === 'COD'
+                ? `
+                    <div class="status-editor">
+                        <label>
+                            Trạng thái thanh toán
+                            <select class="status-select" id="payment-${orderId}">
+                                ${renderStatusOptions(PAYMENT_STATUS_LABELS, paymentStatus)}
+                            </select>
+                        </label>
+                    </div>
+                `
+                : `
+                    <div class="status-readonly">
+                        <span class="badge ${paymentBadgeClass(paymentStatus)}">
+                            ${escapeHtml(PAYMENT_STATUS_LABELS[paymentStatus] || paymentStatus)}
+                        </span>
+                        <span class="text-muted">VNPay tự động cập nhật</span>
+                    </div>
+                `;
+
+            const orderCell = method === 'COD'
+                ? `
+                    <div class="status-editor">
+                        <label>
+                            Trạng thái giao hàng
+                            <select class="status-select" id="order-${orderId}">
+                                ${renderStatusOptions(ORDER_STATUS_LABELS, orderStatus)}
+                            </select>
+                        </label>
+                    </div>
+                `
+                : `
+                    <span class="badge ${orderBadgeClass(orderStatus)}">
+                        ${escapeHtml(ORDER_STATUS_LABELS[orderStatus] || orderStatus)}
+                    </span>
+                `;
+
+            return `
+                <tr id="row-${orderId}">
+                    <td>
+                        <strong>#${escapeHtml(shortId)}</strong><br>
+                        <span class="text-muted">${escapeHtml(date)}</span><br>
+                        <span class="text-muted">
+                            Lượt bán: ${order.salesCounted ? 'Đã tính' : 'Chưa tính'}
+                        </span>
+                    </td>
+                    <td>
+                        <strong>${escapeHtml(order.customerName || 'Khách lẻ')}</strong><br>
+                        ${escapeHtml(order.phone || '')}<br>
+                        <span class="text-muted">${escapeHtml(order.address || '')}</span>
+                    </td>
+                    <td>${productsList || '<span class="text-muted">Không có sản phẩm</span>'}</td>
+                    <td class="price">${formatMoney(order.totalAmount)}</td>
+                    <td>
+                        <span class="badge ${methodBadge}">${escapeHtml(method)}</span>
+                    </td>
+                    <td>${paymentCell}</td>
+                    <td>${orderCell}</td>
+                    <td style="text-align: right;">
+                        <div class="action-group" style="justify-content:flex-end;">
+                            ${method === 'COD' ? `
+                                <button
+                                    class="btn-refresh"
+                                    type="button"
+                                    onclick="updateCodOrder('${orderId}')"
+                                    style="padding: 8px 12px; font-size: 11px;"
+                                >Lưu trạng thái</button>
+                            ` : ''}
+                            <button class="btn-outline" onclick="openBillById('${orderId}', true)">In / VAT</button>
+                            <button class="btn-outline" onclick="openBillById('${orderId}', false)">In thường</button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }
+
+        function renderPagination(pagination) {
+            const info = document.getElementById('pagination-info');
+            const buttons = document.getElementById('pagination-buttons');
+            const note = document.getElementById('admin-result-note');
+
+            if (!info || !buttons) return;
+
+            const page = Number(pagination.page || 1);
+            const pages = Number(pagination.pages || 1);
+            const total = Number(pagination.total || 0);
+            const limit = Number(pagination.limit || 10);
+            const from = total ? (page - 1) * limit + 1 : 0;
+            const to = Math.min(total, page * limit);
+
+            info.textContent = `Hiển thị ${from}–${to} trong ${total} đơn hàng`;
+            if (note) note.textContent = `${total} đơn phù hợp`;
+
+            const pageNumbers = [];
+            const start = Math.max(1, page - 2);
+            const end = Math.min(pages, page + 2);
+            for (let value = start; value <= end; value += 1) {
+                pageNumbers.push(value);
+            }
+
+            buttons.innerHTML = `
+                <button class="page-button" type="button" ${page <= 1 ? 'disabled' : ''} onclick="loadOrders(${page - 1})">‹</button>
+                ${start > 1 ? '<span class="text-muted">…</span>' : ''}
+                ${pageNumbers.map(value => `
+                    <button
+                        class="page-button ${value === page ? 'active' : ''}"
+                        type="button"
+                        onclick="loadOrders(${value})"
+                    >${value}</button>
+                `).join('')}
+                ${end < pages ? '<span class="text-muted">…</span>' : ''}
+                <button class="page-button" type="button" ${page >= pages ? 'disabled' : ''} onclick="loadOrders(${page + 1})">›</button>
+            `;
+        }
+
+        async function loadOrders(page = 1) {
             const tbody = document.getElementById('orders-table-body');
-            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Đang tải dữ liệu...</td></tr>';
+            currentPage = Math.max(1, Number(page || 1));
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">Đang tải dữ liệu...</td></tr>';
 
             try {
-                const response = await fetch('/api/orders');
+                const response = await fetch(`/api/admin/orders?${getFilterQuery(currentPage)}`, {
+                    headers: { Accept: 'application/json' },
+                    cache: 'no-store'
+                });
                 const data = await response.json();
 
-                if (!data.success) {
-                    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color: #ff8b8b;">API trả về lỗi. Vui lòng kiểm tra Backend.</td></tr>';
-                    return;
+                if (!response.ok || !data.success) {
+                    throw new Error(data.message || 'API trả về lỗi.');
                 }
 
                 ordersCache = Array.isArray(data.orders) ? data.orders : [];
+                currentPagination = data.pagination || currentPagination;
+                currentPage = Number(currentPagination.page || currentPage);
 
-                if (ordersCache.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color: #888;">Chưa có đơn hàng nào.</td></tr>';
+                if (!ordersCache.length) {
+                    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color: #888;">Không có đơn hàng phù hợp.</td></tr>';
+                    renderPagination(currentPagination);
                     return;
                 }
 
-                let html = '';
-                ordersCache.forEach(order => {
-                    const date = formatDateTime(order.createdAt);
-                    const products = Array.isArray(order.products) ? order.products : [];
-                    const productsList = products.map(p => {
-                        const name = escapeHtml(p.name || 'Sản phẩm');
-                        const qty = safeNumber(p.quantity || 1);
-                        const price = formatMoney(p.price || 0);
-                        return `• ${name} <span class="text-muted">(SL: ${qty} × ${price})</span>`;
-                    }).join('<br>');
-
-                    const methodBadge = order.paymentMethod === 'VNPAY' ? 'badge-method-vnpay' : 'badge-method-cod';
-                    let statusBadge = 'badge-status-new';
-                    if (order.paymentStatus === 'PAID') statusBadge = 'badge-status-paid';
-                    if (order.paymentStatus === 'FAILED') statusBadge = 'badge-status-failed';
-
-                    const shortId = getShortId(order);
-                    const statusText = order.paymentStatus === 'PENDING' ? (order.orderStatus || 'NEW') : (order.paymentStatus || 'NEW');
-
-                    html += `
-                        <tr>
-                            <td>
-                                <strong>#${shortId}</strong><br>
-                                <span class="text-muted">${escapeHtml(date)}</span>
-                            </td>
-                            <td>
-                                <strong>${escapeHtml(order.customerName || 'Khách lẻ')}</strong><br>
-                                ${escapeHtml(order.phone || '')}<br>
-                                <span class="text-muted">${escapeHtml(order.address || '')}</span>
-                            </td>
-                            <td>${productsList || '<span class="text-muted">Không có sản phẩm</span>'}</td>
-                            <td class="price">${formatMoney(order.totalAmount)}</td>
-                            <td><span class="badge ${methodBadge}">${escapeHtml(order.paymentMethod || 'COD')}</span></td>
-                            <td><span class="badge ${statusBadge}">${escapeHtml(statusText)}</span></td>
-                            <td style="text-align: right;">
-                                <div class="action-group" style="justify-content:flex-end;">
-                                    <button class="btn-outline" onclick="openBillById('${escapeHtml(String(order._id || ''))}', true)">In / VAT</button>
-                                    <button class="btn-outline" onclick="openBillById('${escapeHtml(String(order._id || ''))}', false)">In thường</button>
-                                </div>
-                            </td>
-                        </tr>
-                    `;
-                });
-
-                tbody.innerHTML = html;
+                tbody.innerHTML = ordersCache.map(renderOrderRow).join('');
+                renderPagination(currentPagination);
             } catch (error) {
                 console.error(error);
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color: #ff4d4d;">Lỗi kết nối đến máy chủ. Vui lòng kiểm tra lại Backend.</td></tr>';
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; color: #ff6b6b;">${escapeHtml(error.message || 'Lỗi kết nối máy chủ.')}</td></tr>`;
             }
         }
 
-        document.addEventListener('DOMContentLoaded', loadOrders);
+        function applyFilters() {
+            loadOrders(1);
+        }
+
+        function clearFilters() {
+            ['filter-search', 'filter-payment-method', 'filter-payment-status', 'filter-order-status'].forEach(id => {
+                const element = document.getElementById(id);
+                if (element) element.value = '';
+            });
+            document.getElementById('filter-limit').value = '10';
+            loadOrders(1);
+        }
+
+        async function updateCodOrder(orderId) {
+            const paymentStatus = document.getElementById(`payment-${orderId}`)?.value;
+            const orderStatus = document.getElementById(`order-${orderId}`)?.value;
+            const row = document.getElementById(`row-${orderId}`);
+
+            if (orderStatus === 'DELIVERED') {
+                const confirmed = window.confirm(
+                    'Xác nhận khách đã nhận hàng? Hệ thống sẽ tự chuyển thanh toán COD thành PAID, cộng lượt bán và cho phép khách đánh giá.'
+                );
+                if (!confirmed) return;
+            }
+
+            row?.classList.add('row-saving');
+
+            try {
+                const response = await fetch(`/api/admin/orders/${encodeURIComponent(orderId)}/status`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Accept: 'application/json'
+                    },
+                    body: JSON.stringify({ paymentStatus, orderStatus })
+                });
+                const data = await response.json();
+
+                if (!response.ok || !data.success) {
+                    throw new Error(data.message || 'Không thể cập nhật đơn hàng.');
+                }
+
+                showAdminMessage(data.message || 'Đã cập nhật đơn hàng.');
+                await loadOrders(currentPage);
+            } catch (error) {
+                showAdminMessage(error.message, true);
+            } finally {
+                row?.classList.remove('row-saving');
+            }
+        }
+
+        async function rebuildSales() {
+            const confirmed = window.confirm(
+                'Đồng bộ lại toàn bộ lượt bán từ đơn VNPay PAID và đơn COD DELIVERED? Thao tác này sẽ tính lại từ đầu.'
+            );
+            if (!confirmed) return;
+
+            try {
+                const response = await fetch('/api/admin/orders/rebuild-sales', {
+                    method: 'POST',
+                    headers: { Accept: 'application/json' }
+                });
+                const data = await response.json();
+
+                if (!response.ok || !data.success) {
+                    throw new Error(data.message || 'Không thể đồng bộ lượt bán.');
+                }
+
+                const result = data.result || {};
+                showAdminMessage(
+                    `Đã đồng bộ ${result.ordersCounted || 0} đơn thành công, ${result.productLines || 0} dòng sản phẩm.`
+                );
+                await loadOrders(currentPage);
+            } catch (error) {
+                showAdminMessage(error.message, true);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadOrders(1);
+
+            document.getElementById('filter-search')?.addEventListener('keydown', event => {
+                if (event.key === 'Enter') applyFilters();
+            });
+
+            document.getElementById('filter-limit')?.addEventListener('change', () => {
+                loadOrders(1);
+            });
+        });
+
 
         function openBillById(orderId, enableVat = true) {
             const order = ordersCache.find(item => String(item._id) === String(orderId));
@@ -1380,7 +1942,7 @@
         }
 
     </script>
-<script src="/product-admin-fix.js?v=2"></script>
+
 </body>
 
 </html>

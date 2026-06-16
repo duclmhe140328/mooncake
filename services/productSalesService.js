@@ -1,103 +1,259 @@
 const mongoose = require('mongoose');
 const Product = require('../models/Product');
 
-/**
- * Cộng lượt bán cho sản phẩm sau khi đơn hàng được xác nhận.
- *
- * Mỗi phần tử products nên có:
- * - catalogProductId: _id của Product trong MongoDB (ưu tiên)
- * - baseCode: mã sản phẩm gốc
- * - productId: mã biến thể
- * - quantity: số lượng
- */
-async function increaseProductSales(products = []) {
-    if (!Array.isArray(products) || products.length === 0) return;
+function normalizeCode(value) {
+    return String(value || '')
+        .trim()
+        .toUpperCase();
+}
 
+function getSalesTarget(item) {
+    const catalogProductId = String(
+        item?.catalogProductId || ''
+    ).trim();
+
+    const baseCode = normalizeCode(
+        item?.baseCode
+    );
+
+    const variantCode = normalizeCode(
+        item?.productId
+    );
+
+    if (mongoose.isValidObjectId(catalogProductId)) {
+        return {
+            key: `id:${catalogProductId}`,
+            filter: {
+                _id: catalogProductId
+            }
+        };
+    }
+
+    if (baseCode) {
+        return {
+            key: `code:${baseCode}`,
+            filter: {
+                code: baseCode
+            }
+        };
+    }
+
+    if (variantCode) {
+        return {
+            key: `variant:${variantCode}`,
+            filter: {
+                'options.code': variantCode
+            }
+        };
+    }
+
+    return null;
+}
+
+function groupProductSales(products = []) {
     const grouped = new Map();
 
+    if (!Array.isArray(products)) {
+        return grouped;
+    }
+
     for (const item of products) {
-        const quantity = Math.max(0, Number(item?.quantity || 0));
-        if (!Number.isFinite(quantity) || quantity <= 0) continue;
+        const quantity = Number(item?.quantity || 0);
 
-        const catalogProductId = String(item?.catalogProductId || '').trim();
-        const baseCode = String(item?.baseCode || '').trim().toUpperCase();
-        const variantCode = String(item?.productId || '').trim().toUpperCase();
-
-        let key = '';
-        let filter = null;
-
-        if (mongoose.isValidObjectId(catalogProductId)) {
-            key = `id:${catalogProductId}`;
-            filter = { _id: catalogProductId };
-        } else if (baseCode) {
-            key = `code:${baseCode}`;
-            filter = { code: baseCode };
-        } else if (variantCode) {
-            key = `variant:${variantCode}`;
-            filter = { 'options.code': variantCode };
+        if (
+            !Number.isFinite(quantity) ||
+            quantity <= 0
+        ) {
+            continue;
         }
 
-        if (!filter) continue;
+        const target = getSalesTarget(item);
 
-        const current = grouped.get(key);
+        if (!target) {
+            continue;
+        }
+
+        const current = grouped.get(target.key);
+
         if (current) {
             current.quantity += quantity;
         } else {
-            grouped.set(key, { filter, quantity });
+            grouped.set(target.key, {
+                filter: target.filter,
+                quantity
+            });
         }
     }
+
+    return grouped;
+}
+
+async function increaseProductSales(products = []) {
+    const grouped = groupProductSales(products);
 
     const operations = [...grouped.values()].map(item => ({
         updateOne: {
             filter: item.filter,
-            update: { $inc: { soldCount: item.quantity } }
+            update: {
+                $inc: {
+                    soldCount: item.quantity
+                }
+            }
         }
     }));
 
-    if (operations.length > 0) {
-        await Product.bulkWrite(operations, { ordered: false });
+    if (!operations.length) {
+        return {
+            matched: 0,
+            modified: 0
+        };
     }
+
+    const result = await Product.bulkWrite(
+        operations,
+        {
+            ordered: false
+        }
+    );
+
+    return {
+        matched:
+            result.matchedCount ??
+            result.nMatched ??
+            0,
+        modified:
+            result.modifiedCount ??
+            result.nModified ??
+            0
+    };
 }
 
-/**
- * Đánh dấu một đơn chỉ được cộng lượt bán đúng một lần.
- *
- * Order schema cần có:
- * salesCounted: { type: Boolean, default: false }
- */
 async function countOrderSalesOnce(Order, orderId) {
-    if (!Order || !orderId) return false;
+    if (!Order || !orderId) {
+        return false;
+    }
 
     const claimedOrder = await Order.findOneAndUpdate(
         {
             _id: orderId,
-            salesCounted: { $ne: true }
+            salesCounted: {
+                $ne: true
+            }
         },
         {
-            $set: { salesCounted: true }
+            $set: {
+                salesCounted: true
+            }
         },
         {
             new: true
         }
     );
 
-    if (!claimedOrder) return false;
+    if (!claimedOrder) {
+        return false;
+    }
 
     try {
-        await increaseProductSales(claimedOrder.products || []);
+        await increaseProductSales(
+            claimedOrder.products || []
+        );
+
         return true;
     } catch (error) {
-        // Cho phép thử lại nếu cộng lượt bán thất bại.
         await Order.updateOne(
-            { _id: orderId },
-            { $set: { salesCounted: false } }
+            {
+                _id: orderId
+            },
+            {
+                $set: {
+                    salesCounted: false
+                }
+            }
         ).catch(() => {});
 
         throw error;
     }
 }
 
+async function rebuildProductSalesFromOrders(Order) {
+    if (!Order) {
+        throw new Error(
+            'Thiếu model Order để đồng bộ lượt bán.'
+        );
+    }
+
+    const successfulOrders = await Order.find({
+        $or: [
+            {
+                paymentMethod: 'VNPAY',
+                paymentStatus: 'PAID'
+            },
+            {
+                paymentMethod: 'COD',
+                orderStatus: 'DELIVERED'
+            }
+        ]
+    })
+        .select('_id products')
+        .lean();
+
+    const allProducts = successfulOrders.flatMap(order => {
+        return Array.isArray(order.products)
+            ? order.products
+            : [];
+    });
+
+    await Product.updateMany(
+        {},
+        {
+            $set: {
+                soldCount: 0
+            }
+        }
+    );
+
+    await Order.updateMany(
+        {},
+        {
+            $set: {
+                salesCounted: false
+            }
+        }
+    );
+
+    const salesResult = await increaseProductSales(
+        allProducts
+    );
+
+    const successfulOrderIds =
+        successfulOrders.map(order => order._id);
+
+    if (successfulOrderIds.length) {
+        await Order.updateMany(
+            {
+                _id: {
+                    $in: successfulOrderIds
+                }
+            },
+            {
+                $set: {
+                    salesCounted: true
+                }
+            }
+        );
+    }
+
+    return {
+        ordersCounted: successfulOrders.length,
+        productLines: allProducts.length,
+        matchedProducts: salesResult.matched,
+        modifiedProducts: salesResult.modified
+    };
+}
+
 module.exports = {
     increaseProductSales,
-    countOrderSalesOnce
+    countOrderSalesOnce,
+    rebuildProductSalesFromOrders
 };

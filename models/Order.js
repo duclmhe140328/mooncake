@@ -1,113 +1,170 @@
 const mongoose = require('mongoose');
 
-const orderSchema = new mongoose.Schema(
-    {
-        orderCode: {
-            type: String,
-            required: true,
-            unique: true,
-            index: true
-        },
-
-        customerName: {
-            type: String,
-            required: true,
-            trim: true
-        },
-
-        phone: {
-            type: String,
-            required: true,
-            trim: true
-        },
-
-        address: {
-            type: String,
-            required: true,
-            trim: true
-        },
-
-        products: [
-            {
-                productId: {
-                    type: String,
-                    required: true
-                },
-                name: {
-                    type: String,
-                    required: true
-                },
-                weight: {
-                    type: String,
-                    default: ''
-                },
-                hsd: {
-                    type: String,
-                    default: ''
-                },
-                quantity: {
-                    type: Number,
-                    required: true,
-                    min: 1
-                },
-                price: {
-                    type: Number,
-                    required: true,
-                    min: 0
-                }
-            }
-        ],
-        salesCounted: {
-            type: Boolean,
-            default: false,
-            index: true
-        },
-        totalAmount: {
-            type: Number,
-            required: true,
-            min: 0
-        },
-
-        paymentMethod: {
-            type: String,
-            enum: ['COD', 'VNPAY'],
-            default: 'COD'
-        },
-
-        paymentStatus: {
-            type: String,
-            enum: ['PENDING', 'PAID', 'FAILED'],
-            default: 'PENDING'
-        },
-
-        orderStatus: {
-            type: String,
-            default: 'NEW'
-        },
-
-        vnpayTxnRef: {
-            type: String,
-            default: ''
-        },
-
-        vnpayTransactionNo: {
-            type: String,
-            default: ''
-        },
-
-        vnpayBankCode: {
-            type: String,
-            default: ''
-        },
-
-        vnpayPayDate: {
-            type: String,
-            default: ''
-        }
+const orderProductSchema = new mongoose.Schema({
+    productId: {
+        type: String,
+        trim: true,
+        default: ''
     },
-    {
-        timestamps: true
+    catalogProductId: {
+        type: String,
+        trim: true,
+        default: '',
+        index: true
+    },
+    baseCode: {
+        type: String,
+        trim: true,
+        uppercase: true,
+        default: ''
+    },
+    brand: {
+        type: String,
+        trim: true,
+        default: ''
+    },
+    name: {
+        type: String,
+        trim: true,
+        required: true
+    },
+    weight: {
+        type: String,
+        trim: true,
+        default: ''
+    },
+    hsd: {
+        type: String,
+        trim: true,
+        default: ''
+    },
+    quantity: {
+        type: Number,
+        min: 1,
+        default: 1
+    },
+    price: {
+        type: Number,
+        min: 0,
+        default: 0
     }
-);
+}, {
+    _id: false,
+    strict: false
+});
 
-module.exports = mongoose.model('Order', orderSchema);
+const orderSchema = new mongoose.Schema({
+    orderCode: {
+        type: String,
+        trim: true,
+        uppercase: true,
+        required: true,
+        unique: true,
+        index: true
+    },
+    customerName: {
+        type: String,
+        trim: true,
+        required: true
+    },
+    phone: {
+        type: String,
+        trim: true,
+        required: true,
+        index: true
+    },
+    address: {
+        type: String,
+        trim: true,
+        required: true
+    },
+    products: {
+        type: [orderProductSchema],
+        default: []
+    },
+    totalAmount: {
+        type: Number,
+        min: 0,
+        required: true
+    },
+    paymentMethod: {
+        type: String,
+        enum: ['COD', 'VNPAY'],
+        default: 'COD',
+        index: true
+    },
+    paymentStatus: {
+        type: String,
+        enum: ['PENDING', 'PAID', 'FAILED', 'REFUNDED'],
+        default: 'PENDING',
+        index: true
+    },
+    orderStatus: {
+        type: String,
+        enum: [
+            'NEW',
+            'CONFIRMED',
+            'PACKING',
+            'SHIPPING',
+            'DELIVERED',
+            'CANCELLED'
+        ],
+        default: 'NEW',
+        index: true
+    },
+    salesCounted: {
+        type: Boolean,
+        default: false,
+        index: true
+    },
+    vnpayTxnRef: {
+        type: String,
+        trim: true,
+        default: '',
+        index: true
+    },
+    vnpayTransactionNo: {
+        type: String,
+        trim: true,
+        default: ''
+    },
+    vnpayBankCode: {
+        type: String,
+        trim: true,
+        default: ''
+    },
+    vnpayPayDate: {
+        type: String,
+        trim: true,
+        default: ''
+    },
+    vnpayResponseCode: {
+        type: String,
+        trim: true,
+        default: ''
+    },
+    vnpayTransactionStatus: {
+        type: String,
+        trim: true,
+        default: ''
+    }
+}, {
+    timestamps: true,
+    versionKey: false,
+    strict: false
+});
+
+orderSchema.index({
+    createdAt: -1
+});
+
+orderSchema.index({
+    paymentMethod: 1,
+    paymentStatus: 1,
+    orderStatus: 1,
+    createdAt: -1
+});
+
+module.exports =
+    mongoose.models.Order ||
+    mongoose.model('Order', orderSchema);

@@ -8,6 +8,9 @@ const path = require('path');
 const connectDB = require('./config/db');
 const orderRoutes = require('./routes/orderRoutes');
 const productRoutes = require('./routes/productRoutes');
+const seoRoutes = require('./routes/seoRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
+const adminOrderRoutes = require('./routes/adminOrderRoutes');
 
 const app = express();
 const PUBLIC_DIR = path.join(__dirname, 'public');
@@ -646,6 +649,16 @@ app.get(
    API ROUTES
 ===================================================== */
 
+// API quản trị đơn hàng: phân trang, cập nhật COD, đồng bộ lượt bán.
+app.use(
+    '/api/admin/orders',
+    requireAdminApi,
+    adminOrderRoutes
+);
+
+// Đánh giá sản phẩm công khai; backend tự xác minh đơn đủ điều kiện.
+app.use('/api/reviews', reviewRoutes);
+
 // GET sản phẩm công khai để frontend đọc.
 // POST/PUT/PATCH/DELETE bắt buộc đăng nhập admin.
 app.use(
@@ -694,6 +707,8 @@ app.get('/api/health', (req, res) => {
         message: 'Server is running'
     });
 });
+
+app.use('/', seoRoutes);
 
 /* =====================================================
    STATIC FILES VÀ FRONTEND

@@ -1164,11 +1164,10 @@ exports.createOrder = async (req, res) => {
         await newOrder.save();
 
         /*
-         * COD được tính là đã bán ngay sau khi tạo đơn thành công.
-         * Hàm này chỉ cộng đúng một lần cho mỗi đơn.
+         * COD chưa được tính lượt bán tại thời điểm tạo đơn.
+         * Chỉ khi admin chuyển đơn sang DELIVERED thì
+         * adminOrderController mới cộng lượt bán đúng một lần.
          */
-        await countSalesSafely(newOrder._id);
-
         sendTelegramNotification(newOrder);
 
         return res.status(201).json({

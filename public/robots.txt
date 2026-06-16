@@ -9,5 +9,4 @@ Disallow: /admin-login
 Disallow: /admin-logout
 Disallow: /api/orders
 
-# Không chặn /api/products vì frontend cần API này để Google render danh sách sản phẩm.
 Sitemap: https://nethanoi.com/sitemap.xml

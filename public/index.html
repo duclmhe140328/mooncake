@@ -5,7 +5,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bánh Trung Thu Madame Hương & Maison tại Hà Nội | Trung Thu Phố</title>
-    <link rel="icon" type="image/x-icon" href="./logo.png">
+
+
+    <!-- Chỉ hiện hộp quà mở đầu một lần trong mỗi phiên trình duyệt -->
+    <script>
+        (function () {
+            try {
+                const key = 'trung_thu_pho_intro_seen';
+                const params = new URLSearchParams(window.location.search);
+                const shouldSkip =
+                    sessionStorage.getItem(key) === '1' ||
+                    params.get('skipIntro') === '1';
+
+                if (shouldSkip) {
+                    document.documentElement.classList.add('skip-intro');
+                }
+            } catch (error) {
+                // Nếu trình duyệt chặn sessionStorage thì vẫn để intro hoạt động bình thường.
+            }
+        })();
+    </script>
 
     <!-- SEO CƠ BẢN -->
     <meta name="description" content="Trung Thu Phố cung cấp bánh Trung Thu Madame Hương và Maison tại Hà Nội: hộp quà cao cấp, bánh bán lẻ, quà biếu doanh nghiệp và hỗ trợ giao hàng tận nơi.">
@@ -21,8 +40,8 @@
     <link rel="alternate" hreflang="vi-VN" href="https://nethanoi.com/">
     <link rel="alternate" hreflang="x-default" href="https://nethanoi.com/">
 
-    <link rel="icon" href="./logo.png" type="image/png">
-    <link rel="apple-touch-icon" href="./logo.png">
+    <link rel="icon" href="logo.png" type="image/png">
+    <link rel="apple-touch-icon" href="logo.png">
 
     <!-- Open Graph -->
     <meta property="og:locale" content="vi_VN">
@@ -96,7 +115,7 @@
 
 
 
-    <link rel="preload" href="/logo.png" as="image" fetchpriority="high">
+    <link rel="preload" href="logo.png" as="image" fetchpriority="high">
     <link rel="preload"
           href="https://madamehuong.com.vn/wp-content/uploads/2025/08/banner-2.jpg"
           as="image"
@@ -5049,6 +5068,70 @@
             }
         }
 
+    
+        /* URL sản phẩm riêng cho SEO */
+        .product-seo-link,
+        .product-title-link {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .product-title-link {
+            display: inline;
+        }
+
+        .product-title-link:hover {
+            color: var(--gold-light);
+        }
+
+        .product-detail-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: -6px auto 17px;
+            color: var(--gold-light);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.9px;
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+
+        .product-detail-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 560px) {
+            .product-detail-link {
+                margin-bottom: 15px;
+                font-size: 9.5px;
+            }
+        }
+
+    
+        .dual-story-media-link {
+            display: block;
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .brand-category-link {
+            text-decoration: none;
+        }
+
+    
+
+        /* Không hiện lại hộp quà khi quay về từ trang sản phẩm/thương hiệu */
+        html.skip-intro #intro-overlay {
+            display: none !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }
+
+        html.skip-intro body {
+            overflow: auto !important;
+        }
+
     </style>
 </head>
 
@@ -5079,7 +5162,7 @@
                     <a href="#hero" class="logo" aria-label="Trung Thu Phố - về trang chủ">
                         <span class="logo-monogram" aria-hidden="true">
                             <img
-                                src="./logo.png"
+                                src="logo.png"
                                 alt="Logo Nét Hà Nội"
                                 width="124"
                                 height="108"
@@ -5097,8 +5180,8 @@
                         <ul id="nav-menu">
                             <li><a href="#hero">Trang Chủ</a></li>
                             <li><a href="#about-story">Câu Chuyện</a></li>
-                            <li><a href="#collections">Madame Hương</a></li>
-                            <li><a href="#maison-list">Maison</a></li>
+                            <li><a href="/thuong-hieu/madame-huong">Madame Hương</a></li>
+                            <li><a href="/thuong-hieu/maison">Maison</a></li>
                             <li><a href="#price-list">Bảng Giá</a></li>
                             <li><a href="#retail-list">Bánh Bán Lẻ</a></li>
                             <li><a href="#footer">Liên Hệ</a></li>
@@ -5169,14 +5252,14 @@
 
             <div class="dual-story-grid">
                 <article class="dual-story-card madame-story-card" data-aos="fade-right">
-                    <div class="dual-story-media">
+                    <a class="dual-story-media dual-story-media-link" href="/thuong-hieu/madame-huong" aria-label="Xem toàn bộ sản phẩm Madame Hương">
                         <img
                             src="https://banhtrungthumadamehuongchinhhang.com/uploads/data/3108/files/news/banh-trung-thu-madame-huong-2(1).jpg"
                             alt="Bánh Trung Thu Madame Hương"
                             loading="lazy">
                         <span class="dual-story-number">01</span>
                         <span class="dual-story-brand">Madame Hương</span>
-                    </div>
+                    </a>
                     <div class="dual-story-content">
                         <span class="dual-story-label">Dấu ấn Hà Nội</span>
                         <h3>Thanh lịch và hoài niệm</h3>
@@ -5184,18 +5267,18 @@
                             Những hộp bánh lấy cảm hứng từ phố cổ Hà Nội, kết hợp thiết kế tinh tế
                             cùng hương vị quen thuộc, phù hợp để biếu tặng gia đình, người thân và đối tác.
                         </p>
-                        <a href="#collections" class="dual-story-link">Khám phá Madame Hương <span>→</span></a>
+                        <a href="/thuong-hieu/madame-huong" class="dual-story-link">Khám phá Madame Hương <span>→</span></a>
                     </div>
                 </article>
 
                 <article class="dual-story-card maison-story-card" data-aos="fade-left">
-                    <div class="dual-story-media">
+                    <a class="dual-story-media dual-story-media-link" href="/thuong-hieu/maison" aria-label="Xem toàn bộ sản phẩm Maison">
                         <img
                             src="https://w.ladicdn.com/s700x600/6655429e096047001136c6f6/vanan1-20251217182630-qb_ek.jpg"
                             alt="Bánh Trung Thu Maison cao cấp" loading="lazy">
                         <span class="dual-story-number">02</span>
                         <span class="dual-story-brand">Maison</span>
-                    </div>
+                    </a>
                     <div class="dual-story-content">
                         <span class="dual-story-label">Phong cách đương đại</span>
                         <h3>Sang trọng và khác biệt</h3>
@@ -5203,7 +5286,7 @@
                             Maison hướng đến ngôn ngữ quà tặng hiện đại, đa dạng quy cách và nổi bật
                             trong các dịp biếu tặng trang trọng dành cho gia đình, khách hàng và doanh nghiệp.
                         </p>
-                        <a href="#maison-list" class="dual-story-link">Khám phá Maison <span>→</span></a>
+                        <a href="/thuong-hieu/maison" class="dual-story-link">Khám phá Maison <span>→</span></a>
                     </div>
                 </article>
             </div>
@@ -5777,25 +5860,128 @@
 
     <script>
         // 1. Logic Intro Mở Hộp
+        const INTRO_SESSION_KEY = 'trung_thu_pho_intro_seen';
         const boxTrigger = document.getElementById('box-trigger');
         const introOverlay = document.getElementById('intro-overlay');
+        let mainSiteInitialized = false;
 
-        boxTrigger.addEventListener('click', function () {
-            this.classList.add('open');
-            setTimeout(() => { introOverlay.classList.add('opened'); }, 500);
-            setTimeout(() => {
-                introOverlay.style.display = 'none';
-                document.body.classList.remove('no-scroll');
-                AOS.init({ once: true, offset: 50, duration: 1000 });
-                initSwiper();
-                requestAnimationFrame(() => {
-                    refreshProductSwipers();
-                    if (window.AOS?.refreshHard) window.AOS.refreshHard();
+        function markIntroAsSeen() {
+            try {
+                sessionStorage.setItem(INTRO_SESSION_KEY, '1');
+            } catch (error) {
+                console.warn('Không thể lưu trạng thái intro:', error);
+            }
+        }
+
+        function shouldSkipIntro() {
+            try {
+                const params = new URLSearchParams(window.location.search);
+                return (
+                    sessionStorage.getItem(INTRO_SESSION_KEY) === '1' ||
+                    params.get('skipIntro') === '1'
+                );
+            } catch (error) {
+                return false;
+            }
+        }
+
+        function clearSkipIntroQuery() {
+            const url = new URL(window.location.href);
+
+            if (!url.searchParams.has('skipIntro')) {
+                return;
+            }
+
+            url.searchParams.delete('skipIntro');
+
+            window.history.replaceState(
+                {},
+                document.title,
+                url.pathname +
+                (url.searchParams.toString() ? `?${url.searchParams.toString()}` : '') +
+                url.hash
+            );
+        }
+
+        function initializeMainSite() {
+            if (mainSiteInitialized) {
+                refreshProductSwipers();
+                return;
+            }
+
+            mainSiteInitialized = true;
+            document.body.classList.remove('no-scroll');
+
+            if (window.AOS) {
+                AOS.init({
+                    once: true,
+                    offset: 50,
+                    duration: 1000
                 });
-                setTimeout(refreshProductSwipers, 120);
-                setTimeout(refreshProductSwipers, 450);
-            }, 2000);
-        });
+            }
+
+            initSwiper();
+
+            requestAnimationFrame(() => {
+                refreshProductSwipers();
+
+                if (window.AOS?.refreshHard) {
+                    window.AOS.refreshHard();
+                }
+            });
+
+            setTimeout(refreshProductSwipers, 120);
+            setTimeout(refreshProductSwipers, 450);
+        }
+
+        function skipIntroImmediately() {
+            document.documentElement.classList.add('skip-intro');
+
+            if (introOverlay) {
+                introOverlay.classList.add('opened');
+                introOverlay.style.display = 'none';
+            }
+
+            clearSkipIntroQuery();
+            initializeMainSite();
+        }
+
+        function bootIntroFlow() {
+            if (shouldSkipIntro()) {
+                skipIntroImmediately();
+                return;
+            }
+
+            if (boxTrigger && introOverlay) {
+                boxTrigger.addEventListener('click', function () {
+                    if (this.classList.contains('open')) {
+                        return;
+                    }
+
+                    markIntroAsSeen();
+                    this.classList.add('open');
+
+                    setTimeout(() => {
+                        introOverlay.classList.add('opened');
+                    }, 500);
+
+                    setTimeout(() => {
+                        introOverlay.style.display = 'none';
+                        document.documentElement.classList.add('skip-intro');
+                        initializeMainSite();
+                    }, 2000);
+                }, { once: true });
+                return;
+            }
+
+            initializeMainSite();
+        }
+
+        // Quan trọng: không chạy skipIntroImmediately() ngay tại đây.
+        // Các hàm Swiper và biến productSwiperInstances nằm ở phía dưới script.
+        // Chờ toàn bộ script khởi tạo xong để tránh ReferenceError khi quay
+        // từ trang thương hiệu/sản phẩm về trang chủ.
+        window.setTimeout(bootIntroFlow, 0);
 
         // 2. Swiper Carousel
         const productSwiperInstances = new Map();
@@ -6130,14 +6316,98 @@
             return document.querySelector('#collections .swiper-wrapper');
         }
 
+
+        function slugifyProductUrl(value) {
+            return String(value || '')
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/đ/g, 'd')
+                .replace(/Đ/g, 'D')
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '')
+                .slice(0, 100) || 'san-pham';
+        }
+
+        function getProductSeoUrl(product) {
+            const productId = String(
+                product?._id ||
+                product?.id ||
+                ''
+            ).trim();
+
+            if (!/^[a-f0-9]{24}$/i.test(productId)) {
+                return '';
+            }
+
+            return (
+                '/san-pham/' +
+                slugifyProductUrl(product?.name) +
+                '/' +
+                productId
+            );
+        }
+
+        let requestedProductModalHandled = false;
+
+        function openRequestedProductModal() {
+            if (requestedProductModalHandled) {
+                return;
+            }
+
+            const productId =
+                new URLSearchParams(
+                    window.location.search
+                ).get('product');
+
+            if (!productId) {
+                return;
+            }
+
+            const card = Array
+                .from(
+                    document.querySelectorAll(
+                        '.product-card[data-api-product-id]'
+                    )
+                )
+                .find(item => {
+                    return (
+                        item.dataset.apiProductId ===
+                        productId
+                    );
+                });
+
+            if (!card) {
+                return;
+            }
+
+            requestedProductModalHandled = true;
+            extractProductData(card);
+            openProductModal();
+
+            const cleanUrl =
+                window.location.pathname +
+                window.location.hash;
+
+            window.history.replaceState(
+                {},
+                document.title,
+                cleanUrl
+            );
+        }
+
         function createApiProductSlide(product) {
             const images = normalizeProductImages(product);
             const tags = normalizeProductTags(product);
             const options = normalizeProductOptions(product, images);
             const brand = String(product?.brand || 'Madame Hương').trim();
+            const brandUrl = brand.toLowerCase().includes('maison')
+                ? '/thuong-hieu/maison'
+                : '/thuong-hieu/madame-huong';
             const type = String(product?.productType || product?.type || '').toLowerCase();
             const isRetail = type === 'retail' || product?.isRetail === true || product?.retail === true;
             const productId = String(product?._id || product?.id || product?.code || `SP-${Date.now()}`);
+            const productUrl = getProductSeoUrl(product);
             const code = String(product?.code || productId);
             const name = String(product?.name || 'Sản phẩm mới');
             const description = String(product?.description || product?.desc || 'Thông tin sản phẩm đang được cập nhật.');
@@ -6160,17 +6430,43 @@
                         data-retail="${isRetail ? 'true' : 'false'}"
                         data-special="${product?.isSpecial === true || product?.special === true ? 'true' : 'false'}"
                         data-option-label="${escapeHtml(product?.optionLabel || 'Chọn quy cách')}">
-                        <span class="brand-pill ${brand.toLowerCase().includes('maison') ? 'maison' : ''}">${escapeHtml(brand)}</span>
+                        <a class="brand-pill brand-category-link ${brand.toLowerCase().includes('maison') ? 'maison' : ''}" href="${brandUrl}">${escapeHtml(brand)}</a>
                         ${specialHtml}
-                        <div class="product-image">
-                            <div class="image-placeholder-border"></div>
-                            <img src="${escapeHtml(mainImage)}" alt="${escapeHtml(name)}" loading="eager" decoding="async">
-                        </div>
+                        ${productUrl ? `
+                            <a
+                                class="product-image product-seo-link"
+                                href="${escapeHtml(productUrl)}"
+                                aria-label="Xem chi tiết ${escapeHtml(name)}"
+                            >
+                                <div class="image-placeholder-border"></div>
+                                <img src="${escapeHtml(mainImage)}" alt="${escapeHtml(name)}" loading="eager" decoding="async">
+                            </a>
+                        ` : `
+                            <div class="product-image">
+                                <div class="image-placeholder-border"></div>
+                                <img src="${escapeHtml(mainImage)}" alt="${escapeHtml(name)}" loading="eager" decoding="async">
+                            </div>
+                        `}
                         <div class="product-info">
-                            <h4>${escapeHtml(name)}</h4>
+                            <h4>
+                                ${productUrl ? `
+                                    <a
+                                        class="product-title-link"
+                                        href="${escapeHtml(productUrl)}"
+                                    >${escapeHtml(name)}</a>
+                                ` : escapeHtml(name)}
+                            </h4>
                             <p class="desc">${escapeHtml(description).replace(/\n/g, '<br>')}</p>
                             ${tagsHtml}
                             <p class="price">${escapeHtml(priceText)}</p>
+                            ${productUrl ? `
+                                <a
+                                    class="product-detail-link"
+                                    href="${escapeHtml(productUrl)}"
+                                >
+                                    Xem chi tiết sản phẩm →
+                                </a>
+                            ` : ''}
                             <button class="btn-luxury add-to-cart" style="padding: 10px 25px; font-size: 11px;">Đặt Hàng</button>
                         </div>
                     </div>
@@ -6195,6 +6491,7 @@
             applyAllProductSorts();
             refreshProductSwipers();
             refreshProductSearchResults();
+            openRequestedProductModal();
             if (window.AOS?.refreshHard) window.AOS.refreshHard();
         }
 
@@ -6630,6 +6927,14 @@
 
         // Event delegation giúp cả sản phẩm hard-code và sản phẩm mới từ Admin dùng chung thiết kế/chức năng.
         document.addEventListener('click', function (event) {
+            const seoLink = event.target.closest(
+                '.product-seo-link, .product-title-link, .product-detail-link, .brand-category-link'
+            );
+
+            if (seoLink) {
+                return;
+            }
+
             const orderButton = event.target.closest('.add-to-cart');
             const card = event.target.closest('.product-card');
             if (!card) return;
