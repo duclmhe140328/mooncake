@@ -4,7 +4,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bánh Trung Thu Cao Cấp - Madame Hương & Maison</title>
+    <title>Bánh Trung Thu Madame Hương & Maison tại Hà Nội | Trung Thu Phố</title>
+    <link rel="icon" type="image/x-icon" href="./logo.png">
+
+    <!-- SEO CƠ BẢN -->
+    <meta name="description" content="Trung Thu Phố cung cấp bánh Trung Thu Madame Hương và Maison tại Hà Nội: hộp quà cao cấp, bánh bán lẻ, quà biếu doanh nghiệp và hỗ trợ giao hàng tận nơi.">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="author" content="Trung Thu Phố">
+    <meta name="theme-color" content="#0a0a0a">
+    <meta name="format-detection" content="telephone=yes">
+    <meta name="geo.region" content="VN-HN">
+    <meta name="geo.placename" content="Hoàn Kiếm, Hà Nội">
+
+    <link rel="canonical" href="https://nethanoi.com/">
+    <link rel="alternate" hreflang="vi-VN" href="https://nethanoi.com/">
+    <link rel="alternate" hreflang="x-default" href="https://nethanoi.com/">
+
+    <link rel="icon" href="./logo.png" type="image/png">
+    <link rel="apple-touch-icon" href="./logo.png">
+
+    <!-- Open Graph -->
+    <meta property="og:locale" content="vi_VN">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Trung Thu Phố">
+    <meta property="og:title" content="Bánh Trung Thu Madame Hương & Maison tại Hà Nội | Trung Thu Phố">
+    <meta property="og:description" content="Trung Thu Phố cung cấp bánh Trung Thu Madame Hương và Maison tại Hà Nội: hộp quà cao cấp, bánh bán lẻ, quà biếu doanh nghiệp và hỗ trợ giao hàng tận nơi.">
+    <meta property="og:url" content="https://nethanoi.com/">
+    <meta property="og:image" content="https://nethanoi.com/logo.png">
+    <meta property="og:image:alt" content="Trung Thu Phố - Bánh Trung Thu Madame Hương và Maison">
+
+    <!-- Twitter/X Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Bánh Trung Thu Madame Hương & Maison tại Hà Nội | Trung Thu Phố">
+    <meta name="twitter:description" content="Trung Thu Phố cung cấp bánh Trung Thu Madame Hương và Maison tại Hà Nội: hộp quà cao cấp, bánh bán lẻ, quà biếu doanh nghiệp và hỗ trợ giao hàng tận nơi.">
+    <meta name="twitter:image" content="https://nethanoi.com/logo.png">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Store",
+          "@id": "https://nethanoi.com/#store",
+          "name": "Trung Thu Phố",
+          "alternateName": "Nét Hà Nội",
+          "url": "https://nethanoi.com/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://nethanoi.com/logo.png"
+          },
+          "image": "https://nethanoi.com/logo.png",
+          "telephone": "+84818006466",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "39 Lý Thường Kiệt",
+            "addressLocality": "Hoàn Kiếm",
+            "addressRegion": "Hà Nội",
+            "addressCountry": "VN"
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://nethanoi.com/#website",
+          "url": "https://nethanoi.com/",
+          "name": "Trung Thu Phố",
+          "alternateName": "Nét Hà Nội - Madame Hương & Maison",
+          "publisher": {
+            "@id": "https://nethanoi.com/#store"
+          },
+          "inLanguage": "vi-VN"
+        },
+        {
+          "@type": "WebPage",
+          "@id": "https://nethanoi.com/#webpage",
+          "url": "https://nethanoi.com/",
+          "name": "Bánh Trung Thu Madame Hương & Maison tại Hà Nội | Trung Thu Phố",
+          "description": "Trung Thu Phố cung cấp bánh Trung Thu Madame Hương và Maison tại Hà Nội: hộp quà cao cấp, bánh bán lẻ, quà biếu doanh nghiệp và hỗ trợ giao hàng tận nơi.",
+          "isPartOf": {
+            "@id": "https://nethanoi.com/#website"
+          },
+          "about": {
+            "@id": "https://nethanoi.com/#store"
+          },
+          "inLanguage": "vi-VN"
+        }
+      ]
+    }
+    </script>
+
+
+
+    <link rel="preload" href="/logo.png" as="image" fetchpriority="high">
+    <link rel="preload"
+          href="https://madamehuong.com.vn/wp-content/uploads/2025/08/banner-2.jpg"
+          as="image"
+          fetchpriority="high">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -4836,6 +4932,123 @@
             }
         }
 
+    
+        /* =====================================================
+           FIX LOGO ẢNH TRONG HEADER
+           Đặt file logo tại: public/logo.png
+        ===================================================== */
+        #header .logo {
+            flex-shrink: 0;
+            align-items: center;
+        }
+
+        #header .logo-monogram {
+            width: 62px !important;
+            height: 54px !important;
+            flex: 0 0 62px !important;
+            padding: 0 !important;
+            overflow: hidden !important;
+            border: 0 !important;
+            border-radius: 0 !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            isolation: isolate;
+        }
+
+        #header .logo-monogram::after {
+            display: none !important;
+        }
+
+        #header .logo-monogram img {
+            position: relative;
+            z-index: 2;
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
+            max-width: 100% !important;
+            max-height: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            object-fit: contain !important;
+            object-position: center center !important;
+            opacity: 1 !important;
+            transform: none !important;
+            filter:
+                drop-shadow(0 5px 12px rgba(0, 0, 0, 0.55))
+                drop-shadow(0 0 8px rgba(212, 175, 55, 0.13));
+        }
+
+        #header .logo-copy {
+            flex: 0 1 auto;
+        }
+
+        @media (max-width: 1360px) and (min-width: 1181px) {
+            #header .logo-monogram {
+                width: 54px !important;
+                height: 48px !important;
+                flex-basis: 54px !important;
+            }
+        }
+
+        @media (max-width: 1180px) {
+            #header .logo-monogram {
+                width: 52px !important;
+                height: 46px !important;
+                flex-basis: 52px !important;
+            }
+        }
+
+        @media (max-width: 560px) {
+            #header .logo {
+                gap: 8px !important;
+            }
+
+            #header .logo-monogram {
+                width: 46px !important;
+                height: 40px !important;
+                flex-basis: 46px !important;
+            }
+
+            #header .logo-copy {
+                min-width: 0;
+            }
+
+            #header .logo-title {
+                max-width: calc(100vw - 132px);
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+
+    
+        /* SEO: tiêu đề chính duy nhất của trang */
+        #hero .hero-content h1 {
+            font-size: 64px;
+            line-height: 1.16;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .footer-brand-title {
+            display: inline-block;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            line-height: 1.15;
+        }
+
+        @media (max-width: 992px) {
+            #hero .hero-content h1 {
+                font-size: 48px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            #hero .hero-content h1 {
+                font-size: 32px;
+            }
+        }
+
     </style>
 </head>
 
@@ -4865,7 +5078,14 @@
                 <div class="header-inner">
                     <a href="#hero" class="logo" aria-label="Trung Thu Phố - về trang chủ">
                         <span class="logo-monogram" aria-hidden="true">
-                            <span>T</span>
+                            <img
+                                src="./logo.png"
+                                alt="Logo Nét Hà Nội"
+                                width="124"
+                                height="108"
+                                decoding="async"
+                                fetchpriority="high"
+                            >
                         </span>
                         <span class="logo-copy">
                             <strong class="logo-title gold-text">NÉT HÀ NỘI</strong>
@@ -4929,7 +5149,7 @@
         <div class="hero-overlay"></div>
         <div class="hero-content" data-aos="fade-up" data-aos-duration="1200">
             <span class="hero-subtitle">Madame Hương & Maison</span>
-            <h2 class="gold-text">Tinh Hoa<br>Mùa Trăng</h2>
+            <h1 class="gold-text">Bánh Trung Thu Madame Hương &amp; Maison</h1>
             <p>Tuyển chọn những hộp bánh trung thu cao cấp, trang trọng và tinh tế cho mùa đoàn viên.</p>
             <a href="#collections" class="btn-luxury">Khám Phá Ngay</a>
         </div>
@@ -4972,7 +5192,7 @@
                     <div class="dual-story-media">
                         <img
                             src="https://w.ladicdn.com/s700x600/6655429e096047001136c6f6/vanan1-20251217182630-qb_ek.jpg"
-                            loading="lazy">
+                            alt="Bánh Trung Thu Maison cao cấp" loading="lazy">
                         <span class="dual-story-number">02</span>
                         <span class="dual-story-brand">Maison</span>
                     </div>
@@ -5329,7 +5549,7 @@
         <div class="container footer-grid">
             <div class="footer-col" data-aos="fade-up">
                 <a href="#" class="logo" style="text-align: left; display: block; margin-bottom: 20px;">
-                    <h1 class="gold-text" style="font-size: 24px;">TRUNG THU PHỐ</h1>
+                    <strong class="gold-text footer-brand-title" style="font-size: 24px;">TRUNG THU PHỐ</strong>
                 </a>
                 <p>Điểm bán tuyển chọn bánh trung thu Madame Hương và Maison, hỗ trợ đặt nhiều sản phẩm trong cùng một đơn hàng.
                 </p>
