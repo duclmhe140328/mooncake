@@ -142,7 +142,7 @@ exports.getOrders = async (req, res) => {
     }
 };
 
-exports.updateCodStatus = async (req, res) => {
+exports.updateOrderStatus = async (req, res) => {
     try {
         const orderId = String(
             req.params.id || ''
@@ -164,82 +164,98 @@ exports.updateCodStatus = async (req, res) => {
             });
         }
 
+        const paymentMethod = normalizeStatus(
+            order.paymentMethod || 'COD'
+        );
+
+        const currentPaymentStatus = normalizeStatus(
+            order.paymentStatus || 'PENDING'
+        );
+
+        const currentOrderStatus = normalizeStatus(
+            order.orderStatus || 'NEW'
+        );
+
+        const requestedPaymentStatus = normalizeStatus(
+            req.body.paymentStatus || currentPaymentStatus
+        );
+
+        const requestedOrderStatus = normalizeStatus(
+            req.body.orderStatus || currentOrderStatus
+        );
+
+        if (!ORDER_STATUSES.has(requestedOrderStatus)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Trạng thái giao hàng không hợp lệ.'
+            });
+        }
+
         if (
-            String(order.paymentMethod || '')
-                .toUpperCase() !== 'COD'
+            paymentMethod === 'COD' &&
+            !PAYMENT_STATUSES.has(requestedPaymentStatus)
         ) {
             return res.status(400).json({
                 success: false,
-                message:
-                    'Trạng thái thanh toán trực tuyến được cập nhật tự động, không sửa thủ công tại đây.'
-            });
-        }
-
-        const paymentStatus = normalizeStatus(
-            req.body.paymentStatus ||
-            order.paymentStatus
-        );
-
-        const orderStatus = normalizeStatus(
-            req.body.orderStatus ||
-            order.orderStatus
-        );
-
-        if (!PAYMENT_STATUSES.has(paymentStatus)) {
-            return res.status(400).json({
-                success: false,
-                message:
-                    'Trạng thái thanh toán không hợp lệ.'
-            });
-        }
-
-        if (!ORDER_STATUSES.has(orderStatus)) {
-            return res.status(400).json({
-                success: false,
-                message:
-                    'Trạng thái đơn hàng không hợp lệ.'
+                message: 'Trạng thái thanh toán không hợp lệ.'
             });
         }
 
         const wasCountedSuccessfulCod = (
+            paymentMethod === 'COD' &&
             order.salesCounted === true &&
-            String(order.orderStatus || '').toUpperCase() === 'DELIVERED'
+            currentOrderStatus === 'DELIVERED'
         );
 
-        order.paymentStatus =
-            orderStatus === 'DELIVERED'
-                ? 'PAID'
-                : paymentStatus;
+        // Trạng thái giao hàng được phép sửa với mọi phương thức thanh toán.
+        order.orderStatus = requestedOrderStatus;
 
-        order.orderStatus = orderStatus;
+        if (paymentMethod === 'COD') {
+            // COD được quản trị thủ công. Khi khách đã nhận hàng thì coi là đã thanh toán.
+            order.paymentStatus =
+                requestedOrderStatus === 'DELIVERED'
+                    ? 'PAID'
+                    : requestedPaymentStatus;
+        } else {
+            // VNPay/QR ngân hàng do callback và webhook xác nhận.
+            // Admin chỉ thay đổi tiến độ xử lý/giao hàng, không ghi đè kết quả thanh toán.
+            order.paymentStatus = currentPaymentStatus;
+        }
 
         await order.save();
 
-        if (
-            order.orderStatus === 'DELIVERED' &&
-            order.paymentStatus === 'PAID'
-        ) {
-            await countOrderSalesOnce(
-                Order,
-                order._id
-            );
-        } else if (wasCountedSuccessfulCod) {
-            // Nếu admin sửa một đơn đã giao về trạng thái khác,
-            // tính lại toàn bộ để soldCount không bị giữ sai.
-            await rebuildProductSalesFromOrders(Order);
+        if (paymentMethod === 'COD') {
+            if (
+                order.orderStatus === 'DELIVERED' &&
+                order.paymentStatus === 'PAID'
+            ) {
+                await countOrderSalesOnce(
+                    Order,
+                    order._id
+                );
+            } else if (wasCountedSuccessfulCod) {
+                // Đơn COD đã giao bị chuyển lại trạng thái khác: tính lại soldCount.
+                await rebuildProductSalesFromOrders(Order);
+            }
         }
+
+        const methodLabel =
+            paymentMethod === 'BANK_TRANSFER'
+                ? 'QR ngân hàng'
+                : paymentMethod;
 
         return res.status(200).json({
             success: true,
             message:
+                paymentMethod === 'COD' &&
                 order.orderStatus === 'DELIVERED'
-                    ? 'Đã xác nhận khách nhận hàng, cập nhật thanh toán và lượt bán.'
-                    : 'Đã cập nhật trạng thái đơn COD.',
+                    ? 'Đã xác nhận khách nhận hàng, cập nhật thanh toán COD và lượt bán.'
+                    : `Đã cập nhật trạng thái giao hàng cho đơn ${methodLabel}.`,
             order
         });
     } catch (error) {
         console.error(
-            'updateCodStatus error:',
+            'updateOrderStatus error:',
             error
         );
 
@@ -251,6 +267,9 @@ exports.updateCodStatus = async (req, res) => {
         });
     }
 };
+
+// Giữ alias cũ để không làm hỏng đoạn code nào còn gọi tên cũ.
+exports.updateCodStatus = exports.updateOrderStatus;
 
 exports.rebuildSales = async (req, res) => {
     try {

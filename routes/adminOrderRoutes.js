@@ -11,7 +11,7 @@ router.get(
 
 router.patch(
     '/:id/status',
-    adminOrderController.updateCodStatus
+    adminOrderController.updateOrderStatus
 );
 
 router.post(

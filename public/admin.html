@@ -1138,6 +1138,234 @@
             border-color: rgba(212, 175, 55, 0.55);
             background: rgba(116, 83, 12, 0.22);
         }
+
+
+        /* =====================================================
+           V8: BẢNG ĐƠN HÀNG GỌN + TRẠNG THÁI GIAO HÀNG CHO MỌI ĐƠN
+        ===================================================== */
+        .container {
+            max-width: 1720px;
+            width: min(1720px, calc(100% - 24px));
+            padding: 0;
+        }
+
+        .table-shell {
+            overflow-x: hidden !important;
+            border-color: rgba(212, 175, 55, 0.14);
+        }
+
+        table.admin-table {
+            width: 100% !important;
+            min-width: 0 !important;
+            table-layout: fixed;
+        }
+
+        .admin-table th,
+        .admin-table td {
+            padding: 11px 8px;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+
+        .admin-table th {
+            font-size: 9px;
+            letter-spacing: .55px;
+        }
+
+        .admin-table td {
+            font-size: 11px;
+            line-height: 1.48;
+        }
+
+        .admin-table th:nth-child(1),
+        .admin-table td:nth-child(1) { width: 11%; }
+        .admin-table th:nth-child(2),
+        .admin-table td:nth-child(2) { width: 14%; }
+        .admin-table th:nth-child(3),
+        .admin-table td:nth-child(3) { width: 20%; }
+        .admin-table th:nth-child(4),
+        .admin-table td:nth-child(4) { width: 8%; }
+        .admin-table th:nth-child(5),
+        .admin-table td:nth-child(5) { width: 8%; }
+        .admin-table th:nth-child(6),
+        .admin-table td:nth-child(6) { width: 11%; }
+        .admin-table th:nth-child(7),
+        .admin-table td:nth-child(7) { width: 14%; }
+        .admin-table th:nth-child(8),
+        .admin-table td:nth-child(8) { width: 14%; }
+
+        .status-editor,
+        .status-readonly {
+            min-width: 0 !important;
+            width: 100%;
+        }
+
+        .status-select {
+            min-width: 0;
+            min-height: 36px;
+            padding: 0 6px;
+            font-size: 9px;
+        }
+
+        .order-products-list {
+            display: grid;
+            gap: 5px;
+        }
+
+        .order-product-line {
+            padding-bottom: 5px;
+            border-bottom: 1px dashed rgba(255,255,255,.06);
+        }
+
+        .order-product-line:last-child {
+            padding-bottom: 0;
+            border-bottom: 0;
+        }
+
+        .admin-table .badge {
+            max-width: 100%;
+            padding: 5px 7px;
+            font-size: 8px;
+            letter-spacing: .45px;
+            white-space: normal;
+            text-align: center;
+            justify-content: center;
+        }
+
+        .admin-table .action-group {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 6px;
+        }
+
+        .admin-table .action-group button {
+            width: 100%;
+            min-width: 0;
+            padding: 8px 6px !important;
+            font-size: 9px !important;
+        }
+
+        .online-payment-note {
+            display: block;
+            margin-top: 6px;
+            font-size: 9px;
+            line-height: 1.35;
+        }
+
+        @media (max-width: 1180px) {
+            .container {
+                width: min(100% - 16px, 980px);
+                margin-top: 18px;
+            }
+
+            .panel {
+                padding: 18px;
+            }
+
+            .table-shell {
+                border: 0;
+                background: transparent;
+                overflow: visible !important;
+            }
+
+            table.admin-table,
+            .admin-table tbody {
+                display: block;
+                width: 100%;
+            }
+
+            .admin-table thead {
+                display: none;
+            }
+
+            .admin-table tr {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 10px;
+                width: 100%;
+                margin-bottom: 14px;
+                padding: 13px;
+                border: 1px solid rgba(212, 175, 55, .22);
+                border-radius: 10px;
+                background: linear-gradient(145deg, rgba(20,20,20,.98), rgba(8,8,8,.98));
+                box-shadow: 0 12px 34px rgba(0,0,0,.28);
+            }
+
+            .admin-table td,
+            .admin-table td:nth-child(n) {
+                display: block;
+                width: auto;
+                padding: 9px 10px;
+                border: 1px solid rgba(255,255,255,.055);
+                border-radius: 7px;
+                background: rgba(255,255,255,.018);
+                font-size: 11px;
+            }
+
+            .admin-table td::before {
+                content: attr(data-label);
+                display: block;
+                margin-bottom: 6px;
+                color: var(--gold-main);
+                font-size: 8px;
+                font-weight: 700;
+                letter-spacing: .8px;
+                text-transform: uppercase;
+            }
+
+            .admin-table td[data-label="Sản phẩm"],
+            .admin-table td[data-label="Hành động"] {
+                grid-column: 1 / -1;
+            }
+
+            .admin-table td[colspan] {
+                grid-column: 1 / -1;
+                text-align: center;
+            }
+
+            .admin-table td[colspan]::before {
+                display: none;
+            }
+
+            .admin-table .action-group {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 640px) {
+            .header {
+                padding: 13px 14px;
+            }
+
+            .header h1 {
+                font-size: 17px;
+            }
+
+            .panel {
+                padding: 13px;
+            }
+
+            .admin-table tr {
+                grid-template-columns: 1fr;
+                padding: 10px;
+            }
+
+            .admin-table td[data-label="Sản phẩm"],
+            .admin-table td[data-label="Hành động"] {
+                grid-column: auto;
+            }
+
+            .admin-table .action-group {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-toolbar-actions-left,
+            .admin-toolbar-actions-right {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+
 </style>
 </head>
 
@@ -1215,6 +1443,9 @@
 
             <div class="table-shell">
                 <table class="admin-table">
+                    <colgroup>
+                        <col><col><col><col><col><col><col><col>
+                    </colgroup>
                     <thead>
                         <tr>
                             <th>Mã Đơn / Ngày</th>
@@ -1314,13 +1545,13 @@
            Sửa các dòng dưới theo thông tin doanh nghiệp thật của bạn.
         ============================= */
         const SELLER_INFO = {
-            companyName: 'CÔNG TY TNHH TM VÀ DV BÁNH TRUNG THU MADAME HƯƠNG',
-            brandName: 'MADAME HƯƠNG',
+            companyName: 'Nhà Phân Phối MADAME HƯƠNG & MAISON MOONCAKE NÉT HÀ NỘI',
+            brandName: 'MADAME HƯƠNG & MAISON MOONCAKE NÉT HÀ NỘI',
             taxCode: 'ĐIỀN MÃ SỐ THUẾ CỦA CÔNG TY',
             address: '39 Lý Thường Kiệt, Hoàn Kiếm, Hà Nội',
-            phone: '08 1800 6466',
-            website: 'www.madamehuong.net',
-            email: 'contact@madamehuong.net',
+            phone: '03 5924 3986',
+            website: 'https://nethanoi.com',
+            email: 'talklega@gmail.com',
             bankInfo: 'Ngân hàng: ........................................ | STK: ........................................ | Chủ TK: ........................................'
         };
 
@@ -1443,8 +1674,13 @@
                 const name = escapeHtml(product.name || 'Sản phẩm');
                 const qty = safeNumber(product.quantity || 1);
                 const price = formatMoney(product.price || 0);
-                return `• ${name} <span class="text-muted">(SL: ${qty} × ${price})</span>`;
-            }).join('<br>');
+                return `
+                    <div class="order-product-line">
+                        <strong>${name}</strong><br>
+                        <span class="text-muted">SL: ${qty} × ${price}</span>
+                    </div>
+                `;
+            }).join('');
 
             const method = String(order.paymentMethod || 'COD').toUpperCase();
             const paymentStatus = String(order.paymentStatus || 'PENDING').toUpperCase();
@@ -1454,6 +1690,9 @@
                 : method === 'BANK_TRANSFER'
                     ? 'badge-method-bank'
                     : 'badge-method-cod';
+            const methodLabel = method === 'BANK_TRANSFER'
+                ? 'QR NGÂN HÀNG'
+                : method;
             const shortId = getShortId(order);
             const orderId = escapeHtml(String(order._id || ''));
 
@@ -1473,58 +1712,56 @@
                         <span class="badge ${paymentBadgeClass(paymentStatus)}">
                             ${escapeHtml(PAYMENT_STATUS_LABELS[paymentStatus] || paymentStatus)}
                         </span>
-                        <span class="text-muted">${method === 'BANK_TRANSFER' ? 'SePay tự động cập nhật' : 'VNPay tự động cập nhật'}</span>
+                        <span class="text-muted online-payment-note">
+                            ${method === 'BANK_TRANSFER' ? 'SePay xác nhận tự động' : 'VNPay xác nhận tự động'}
+                        </span>
                     </div>
                 `;
 
-            const orderCell = method === 'COD'
-                ? `
-                    <div class="status-editor">
-                        <label>
-                            Trạng thái giao hàng
-                            <select class="status-select" id="order-${orderId}">
-                                ${renderStatusOptions(ORDER_STATUS_LABELS, orderStatus)}
-                            </select>
-                        </label>
-                    </div>
-                `
-                : `
-                    <span class="badge ${orderBadgeClass(orderStatus)}">
-                        ${escapeHtml(ORDER_STATUS_LABELS[orderStatus] || orderStatus)}
-                    </span>
-                `;
+            // Tiến độ đóng gói/giao hàng được sửa với mọi phương thức.
+            const orderCell = `
+                <div class="status-editor">
+                    <label>
+                        Trạng thái giao hàng
+                        <select class="status-select" id="order-${orderId}">
+                            ${renderStatusOptions(ORDER_STATUS_LABELS, orderStatus)}
+                        </select>
+                    </label>
+                </div>
+            `;
 
             return `
-                <tr id="row-${orderId}">
-                    <td>
+                <tr id="row-${orderId}" data-payment-method="${escapeHtml(method)}">
+                    <td data-label="Mã đơn / ngày">
                         <strong>#${escapeHtml(shortId)}</strong><br>
                         <span class="text-muted">${escapeHtml(date)}</span><br>
                         <span class="text-muted">
                             Lượt bán: ${order.salesCounted ? 'Đã tính' : 'Chưa tính'}
                         </span>
                     </td>
-                    <td>
+                    <td data-label="Khách hàng">
                         <strong>${escapeHtml(order.customerName || 'Khách lẻ')}</strong><br>
                         ${escapeHtml(order.phone || '')}<br>
                         <span class="text-muted">${escapeHtml(order.address || '')}</span>
                     </td>
-                    <td>${productsList || '<span class="text-muted">Không có sản phẩm</span>'}</td>
-                    <td class="price">${formatMoney(order.totalAmount)}</td>
-                    <td>
-                        <span class="badge ${methodBadge}">${escapeHtml(method)}</span>
+                    <td data-label="Sản phẩm">
+                        <div class="order-products-list">
+                            ${productsList || '<span class="text-muted">Không có sản phẩm</span>'}
+                        </div>
                     </td>
-                    <td>${paymentCell}</td>
-                    <td>${orderCell}</td>
-                    <td style="text-align: right;">
-                        <div class="action-group" style="justify-content:flex-end;">
-                            ${method === 'COD' ? `
-                                <button
-                                    class="btn-refresh"
-                                    type="button"
-                                    onclick="updateCodOrder('${orderId}')"
-                                    style="padding: 8px 12px; font-size: 11px;"
-                                >Lưu trạng thái</button>
-                            ` : ''}
+                    <td data-label="Tổng tiền" class="price">${formatMoney(order.totalAmount)}</td>
+                    <td data-label="Phương thức">
+                        <span class="badge ${methodBadge}">${escapeHtml(methodLabel)}</span>
+                    </td>
+                    <td data-label="Thanh toán">${paymentCell}</td>
+                    <td data-label="Giao hàng">${orderCell}</td>
+                    <td data-label="Hành động">
+                        <div class="action-group">
+                            <button
+                                class="btn-refresh"
+                                type="button"
+                                onclick="updateOrderStatus('${orderId}')"
+                            >Lưu trạng thái</button>
                             <button class="btn-outline" onclick="openBillById('${orderId}', true)">In / VAT</button>
                             <button class="btn-outline" onclick="openBillById('${orderId}', false)">In thường</button>
                         </div>
@@ -1532,6 +1769,7 @@
                 </tr>
             `;
         }
+
 
         function renderPagination(pagination) {
             const info = document.getElementById('pagination-info');
@@ -1619,16 +1857,22 @@
             loadOrders(1);
         }
 
-        async function updateCodOrder(orderId) {
+        async function updateOrderStatus(orderId) {
             const paymentStatus = document.getElementById(`payment-${orderId}`)?.value;
             const orderStatus = document.getElementById(`order-${orderId}`)?.value;
             const row = document.getElementById(`row-${orderId}`);
+            const method = String(row?.dataset.paymentMethod || 'COD').toUpperCase();
+
+            if (!orderStatus) {
+                showAdminMessage('Không đọc được trạng thái giao hàng.', true);
+                return;
+            }
 
             if (orderStatus === 'DELIVERED') {
-                const confirmed = window.confirm(
-                    'Xác nhận khách đã nhận hàng? Hệ thống sẽ tự chuyển thanh toán COD thành PAID, cộng lượt bán và cho phép khách đánh giá.'
-                );
-                if (!confirmed) return;
+                const message = method === 'COD'
+                    ? 'Xác nhận khách đã nhận hàng? COD sẽ chuyển thành đã thanh toán, cộng lượt bán và mở quyền đánh giá.'
+                    : 'Xác nhận đơn đã giao thành công cho khách? Trạng thái thanh toán trực tuyến vẫn được giữ nguyên.';
+                if (!window.confirm(message)) return;
             }
 
             row?.classList.add('row-saving');
@@ -1648,7 +1892,7 @@
                     throw new Error(data.message || 'Không thể cập nhật đơn hàng.');
                 }
 
-                showAdminMessage(data.message || 'Đã cập nhật đơn hàng.');
+                showAdminMessage(data.message || 'Đã cập nhật trạng thái giao hàng.');
                 await loadOrders(currentPage);
             } catch (error) {
                 showAdminMessage(error.message, true);
@@ -1657,9 +1901,13 @@
             }
         }
 
+        // Tương thích với nút/code cũ nếu trình duyệt còn cache.
+        const updateCodOrder = updateOrderStatus;
+
+
         async function rebuildSales() {
             const confirmed = window.confirm(
-                'Đồng bộ lại toàn bộ lượt bán từ đơn VNPay/QR ngân hàng PAID và đơn COD DELIVERED? Thao tác này sẽ tính lại từ đầu.'
+                'Đồng bộ lại toàn bộ lượt bán từ đơn VNPay/QR ngân hàng đã thanh toán và đơn COD đã giao? Thao tác này sẽ tính lại từ đầu.'
             );
             if (!confirmed) return;
 
@@ -1781,7 +2029,7 @@
             const buyerDisplayName = buyerCompany || order.customerName || 'Khách lẻ';
             const buyerDisplayAddress = buyerVatAddress || order.address || '';
             const invoiceType = vatEnabled ? 'HÓA ĐƠN BÁN HÀNG KIÊM THÔNG TIN VAT' : 'HÓA ĐƠN BÁN HÀNG';
-            const invoiceSub = vatEnabled ? 'Bản in phục vụ đối soát đơn hàng và thông tin xuất VAT' : 'Bản in phiếu bán hàng từ hệ thống admin';
+            const invoiceSub = vatEnabled ? 'Bản in phục vụ đối soát đơn hàng và thông tin xuất VAT' : 'Bản in phiếu bán hàng từ hệ thống nhà phân phối Nét Hà Nội';
             const amountText = numberToVietnameseWords(Math.round(totalGross));
 
             const printArea = document.getElementById('print-area');
@@ -1790,7 +2038,9 @@
                 <div class="invoice-inner">
                     <div class="invoice-topline">
                         <div class="seller-brand">
-                            <div class="logo-mark">MH</div>
+                            <div class="logo-mark">
+                            <img src="https://nethanoi.com/logo.png" alt="Logo" width="48" height="48">    
+                            </div>
                             <div class="seller-info">
                                 <h2>${escapeHtml(SELLER_INFO.companyName)}</h2>
                                 <p><b>Thương hiệu:</b> ${escapeHtml(SELLER_INFO.brandName)}</p>
@@ -1891,7 +2141,7 @@
                     <div class="invoice-footer">
                         <div>
                             <b>Lưu ý:</b> Bản in này dùng để lưu nội bộ/đối soát đơn hàng. Khi xuất VAT chính thức cần phát hành hóa đơn điện tử theo hệ thống HĐĐT của doanh nghiệp.<br>
-                            Cảm ơn Quý khách đã tin tưởng Madame Hương.
+                            Cảm ơn Quý khách đã tin tưởng Nét Hà Nội.
                         </div>
                         <div class="fake-qr" title="Mã tra cứu nội bộ"></div>
                     </div>
