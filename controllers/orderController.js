@@ -8,6 +8,9 @@ const {
 
 const telegramService = require('../services/telegramService');
 const vnpayService = require('../services/vnpayService');
+const {
+    createPendingBankPayment
+} = require('../services/bankPaymentService');
 
 /* =====================================================
    TẠO MÃ ĐƠN HÀNG
@@ -1145,6 +1148,52 @@ exports.createOrder = async (req, res) => {
                 orderCode,
                 orderId: pendingOrder._id
             });
+        }
+
+
+        /*
+         * Chuyển khoản ngân hàng bằng QR VietQR + SePay.
+         * Lưu đơn trước, sau đó tạo giao dịch chờ thanh toán.
+         */
+        if (paymentMethod === 'BANK_TRANSFER') {
+            const pendingOrder = new Order({
+                ...orderData,
+
+                orderCode,
+                totalAmount,
+
+                paymentMethod: 'BANK_TRANSFER',
+                paymentStatus: 'PENDING',
+                orderStatus: 'NEW',
+                bankTransferContent: orderCode
+            });
+
+            await pendingOrder.save();
+
+            try {
+                const bankPayment =
+                    await createPendingBankPayment(
+                        pendingOrder,
+                        req
+                    );
+
+                return res.status(200).json({
+                    success: true,
+                    message:
+                        'Đơn chờ chuyển khoản đã được tạo',
+                    paymentUrl:
+                        `/bank-checkout.html?orderCode=${encodeURIComponent(bankPayment.orderCode)}`,
+                    orderCode,
+                    orderId: pendingOrder._id
+                });
+            } catch (paymentError) {
+                await Order.deleteOne({
+                    _id: pendingOrder._id,
+                    paymentStatus: 'PENDING'
+                }).catch(() => {});
+
+                throw paymentError;
+            }
         }
 
         /*

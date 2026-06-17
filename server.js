@@ -11,6 +11,7 @@ const productRoutes = require('./routes/productRoutes');
 const seoRoutes = require('./routes/seoRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
 const adminOrderRoutes = require('./routes/adminOrderRoutes');
+const paymentRoutes = require('./routes/paymentRoutes');
 
 const app = express();
 const PUBLIC_DIR = path.join(__dirname, 'public');
@@ -655,6 +656,9 @@ app.use(
     requireAdminApi,
     adminOrderRoutes
 );
+
+// QR chuyển khoản ngân hàng và webhook SePay.
+app.use('/api/payments', paymentRoutes);
 
 // Đánh giá sản phẩm công khai; backend tự xác minh đơn đủ điều kiện.
 app.use('/api/reviews', reviewRoutes);

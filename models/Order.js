@@ -89,7 +89,7 @@ const orderSchema = new mongoose.Schema({
     },
     paymentMethod: {
         type: String,
-        enum: ['COD', 'VNPAY'],
+        enum: ['COD', 'VNPAY', 'BANK_TRANSFER'],
         default: 'COD',
         index: true
     },
@@ -116,6 +116,33 @@ const orderSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
         index: true
+    },
+
+    bankTransferContent: {
+        type: String,
+        trim: true,
+        default: '',
+        index: true
+    },
+    bankTransactionId: {
+        type: String,
+        trim: true,
+        default: '',
+        index: true
+    },
+    bankReferenceCode: {
+        type: String,
+        trim: true,
+        default: ''
+    },
+    bankGatewayCode: {
+        type: String,
+        trim: true,
+        default: ''
+    },
+    bankPaidAt: {
+        type: Date,
+        default: null
     },
     vnpayTxnRef: {
         type: String,

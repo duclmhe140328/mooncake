@@ -438,7 +438,9 @@
             }
 
             if (
-                paymentMethod === 'VNPAY' &&
+                ['VNPAY', 'BANK_TRANSFER'].includes(
+                    paymentMethod
+                ) &&
                 data.paymentUrl
             ) {
                 window.location.href = data.paymentUrl;
@@ -1079,6 +1081,13 @@
         return date.toLocaleDateString('vi-VN');
     }
 
+    function paymentMethodLabel(value) {
+        const method = String(value || 'COD').toUpperCase();
+        if (method === 'BANK_TRANSFER') return 'QR ngân hàng';
+        if (method === 'VNPAY') return 'VNPay';
+        return 'COD';
+    }
+
     function renderReviewItem(review) {
         const reviewerName = String(review.reviewerName || 'Khách hàng');
         const reviewerInitial = reviewerName.trim().charAt(0).toUpperCase() || 'K';
@@ -1108,7 +1117,7 @@
                             Đã xác minh mua hàng
                         </small>
                         <small class="seo-review-payment">
-                            ${escapeHtml(review.paymentMethod || 'COD')}
+                            ${escapeHtml(paymentMethodLabel(review.paymentMethod))}
                         </small>
                     </footer>
                 ` : ''}

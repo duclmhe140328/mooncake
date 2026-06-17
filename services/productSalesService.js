@@ -186,7 +186,9 @@ async function rebuildProductSalesFromOrders(Order) {
     const successfulOrders = await Order.find({
         $or: [
             {
-                paymentMethod: 'VNPAY',
+                paymentMethod: {
+                    $in: ['VNPAY', 'BANK_TRANSFER']
+                },
                 paymentStatus: 'PAID'
             },
             {

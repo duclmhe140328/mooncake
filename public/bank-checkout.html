@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#080808">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Quét QR thanh toán | Trung Thu Phố</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/bank-payment.css?v=7">
+    <script src="/bank-checkout.js?v=7" defer></script>
+</head>
+<body>
+    <main class="bank-shell">
+        <header class="bank-header">
+            <a class="bank-brand" href="/?skipIntro=1">
+                <img src="/logo.png" alt="Logo Nét Hà Nội">
+                <span>
+                    <strong>NÉT HÀ NỘI</strong>
+                    <small>Madame Hương • Maison</small>
+                </span>
+            </a>
+            <a class="bank-home" href="/?skipIntro=1">Về trang chủ</a>
+        </header>
+
+        <section class="bank-card" aria-live="polite">
+            <div class="bank-card-head">
+                <div>
+                    <p class="bank-eyebrow">Thanh toán trực tiếp</p>
+                    <h1>Quét QR ngân hàng</h1>
+                </div>
+                <span id="payment-status" class="status-pill pending">Đang chờ thanh toán</span>
+            </div>
+
+            <div id="loading-state" class="bank-loading">Đang tải thông tin giao dịch...</div>
+
+            <div id="checkout-content" class="bank-content" hidden>
+                <div class="qr-column">
+                    <div class="qr-frame">
+                        <img id="qr-image" alt="Mã QR chuyển khoản ngân hàng">
+                    </div>
+                    <div class="countdown-box">
+                        <span>QR còn hiệu lực</span>
+                        <strong id="countdown">15:00</strong>
+                    </div>
+                    <p class="waiting-note"><span class="pulse-dot"></span>Hệ thống đang tự động kiểm tra tiền vào</p>
+                </div>
+
+                <div class="transfer-column">
+                    <h2>Thông tin chuyển khoản</h2>
+                    <p class="checkout-subtitle">Không sửa số tiền hoặc nội dung chuyển khoản để SePay xác nhận đúng đơn hàng.</p>
+
+                    <div class="transfer-details">
+                        <div class="transfer-row"><span>Ngân hàng</span><div><strong id="bank-name">—</strong></div></div>
+                        <div class="transfer-row"><span>Số tài khoản</span><div><strong id="account-number">—</strong><button class="copy-button" data-copy-target="account-number" type="button">Sao chép</button></div></div>
+                        <div class="transfer-row"><span>Chủ tài khoản</span><div><strong id="account-name">—</strong></div></div>
+                        <div class="transfer-row highlight"><span>Số tiền</span><div><strong id="payment-amount">—</strong><button class="copy-button" data-copy-target="payment-amount-raw" type="button">Sao chép</button></div><input id="payment-amount-raw" type="hidden"></div>
+                        <div class="transfer-row highlight"><span>Nội dung</span><div><strong id="transfer-content">—</strong><button class="copy-button" data-copy-target="transfer-content" type="button">Sao chép</button></div></div>
+                        <div class="transfer-row"><span>Mã đơn hàng</span><div><strong id="order-code">—</strong></div></div>
+                    </div>
+
+                    <div class="bank-warning"><strong>Lưu ý:</strong> Chỉ khi server nhận webhook giao dịch thật thì đơn mới chuyển sang “Đã thanh toán”.</div>
+                    <p id="checkout-message" class="bank-message" role="alert"></p>
+                    <button id="cancel-button" class="bank-secondary" type="button">Hủy giao dịch</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="floating-contact-bank">
+        <a class="bank-zalo" href="https://zalo.me/0818006466" target="_blank" rel="noopener noreferrer">Zalo</a>
+        <a class="bank-hotline" href="tel:0818006466"><span>☎</span><span><strong>08 1800 6466</strong><small>Bấm gọi ngay</small></span></a>
+    </div>
+</body>
+</html>

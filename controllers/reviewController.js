@@ -87,7 +87,7 @@ function isReviewEligible(order) {
         order.orderStatus || ''
     ).toUpperCase();
 
-    if (paymentMethod === 'VNPAY') {
+    if (['VNPAY', 'BANK_TRANSFER'].includes(paymentMethod)) {
         return paymentStatus === 'PAID';
     }
 
@@ -319,10 +319,13 @@ exports.createReview = async (req, res) => {
         }
 
         if (!isReviewEligible(order)) {
-            const message =
-                String(order.paymentMethod).toUpperCase() === 'VNPAY'
-                    ? 'Đơn VNPay chỉ được đánh giá sau khi thanh toán thành công.'
-                    : 'Đơn COD chỉ được đánh giá sau khi admin xác nhận đã giao và khách đã nhận hàng.';
+            const method = String(
+                order.paymentMethod || 'COD'
+            ).toUpperCase();
+
+            const message = method === 'COD'
+                ? 'Đơn COD chỉ được đánh giá sau khi admin xác nhận đã giao và khách đã nhận hàng.'
+                : 'Đơn thanh toán trực tuyến chỉ được đánh giá sau khi hệ thống xác nhận đã thanh toán thành công.';
 
             return res.status(403).json({
                 success: false,

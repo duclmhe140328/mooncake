@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#080808">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Kết quả chuyển khoản | Trung Thu Phố</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/bank-payment.css?v=7">
+    <script src="/bank-result.js?v=7" defer></script>
+</head>
+<body>
+    <main class="bank-result-page">
+        <section id="result-card" class="bank-result-card pending">
+            <div id="result-icon" class="result-icon">…</div>
+            <h1 id="result-title">Đang kiểm tra giao dịch</h1>
+            <p id="result-description" class="bank-result-description">Hệ thống đang đối chiếu kết quả thanh toán.</p>
+
+            <div id="result-details" class="result-details" hidden>
+                <div class="detail-row"><span>Mã đơn hàng</span><strong id="detail-order"></strong></div>
+                <div class="detail-row"><span>Khách hàng</span><strong id="detail-name"></strong></div>
+                <div class="detail-row"><span>Nội dung</span><strong id="detail-description"></strong></div>
+                <div class="detail-row"><span>Số tiền</span><strong id="detail-amount"></strong></div>
+            </div>
+
+            <div class="result-actions">
+                <a class="bank-primary" href="/?skipIntro=1">Về trang chủ</a>
+                <a class="bank-secondary" href="/thuong-hieu/madame-huong">Tiếp tục mua</a>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

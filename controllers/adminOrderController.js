@@ -66,7 +66,7 @@ exports.getOrders = async (req, res) => {
             req.query.search || ''
         ).trim();
 
-        if (['COD', 'VNPAY'].includes(paymentMethod)) {
+        if (['COD', 'VNPAY', 'BANK_TRANSFER'].includes(paymentMethod)) {
             filter.paymentMethod = paymentMethod;
         }
 
@@ -171,7 +171,7 @@ exports.updateCodStatus = async (req, res) => {
             return res.status(400).json({
                 success: false,
                 message:
-                    'Trạng thái thanh toán VNPay được cập nhật tự động, không sửa thủ công tại đây.'
+                    'Trạng thái thanh toán trực tuyến được cập nhật tự động, không sửa thủ công tại đây.'
             });
         }
 

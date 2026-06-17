@@ -1132,6 +1132,12 @@
                 flex: 1 1 auto;
             }
         }
+
+        .badge-method-bank {
+            color: #f8e6a0;
+            border-color: rgba(212, 175, 55, 0.55);
+            background: rgba(116, 83, 12, 0.22);
+        }
 </style>
 </head>
 
@@ -1164,6 +1170,7 @@
                     <option value="">Mọi phương thức</option>
                     <option value="COD">COD</option>
                     <option value="VNPAY">VNPay</option>
+                    <option value="BANK_TRANSFER">QR ngân hàng</option>
                 </select>
                 <select id="filter-payment-status">
                     <option value="">Mọi thanh toán</option>
@@ -1442,7 +1449,11 @@
             const method = String(order.paymentMethod || 'COD').toUpperCase();
             const paymentStatus = String(order.paymentStatus || 'PENDING').toUpperCase();
             const orderStatus = String(order.orderStatus || 'NEW').toUpperCase();
-            const methodBadge = method === 'VNPAY' ? 'badge-method-vnpay' : 'badge-method-cod';
+            const methodBadge = method === 'VNPAY'
+                ? 'badge-method-vnpay'
+                : method === 'BANK_TRANSFER'
+                    ? 'badge-method-bank'
+                    : 'badge-method-cod';
             const shortId = getShortId(order);
             const orderId = escapeHtml(String(order._id || ''));
 
@@ -1462,7 +1473,7 @@
                         <span class="badge ${paymentBadgeClass(paymentStatus)}">
                             ${escapeHtml(PAYMENT_STATUS_LABELS[paymentStatus] || paymentStatus)}
                         </span>
-                        <span class="text-muted">VNPay tự động cập nhật</span>
+                        <span class="text-muted">${method === 'BANK_TRANSFER' ? 'SePay tự động cập nhật' : 'VNPay tự động cập nhật'}</span>
                     </div>
                 `;
 
@@ -1648,7 +1659,7 @@
 
         async function rebuildSales() {
             const confirmed = window.confirm(
-                'Đồng bộ lại toàn bộ lượt bán từ đơn VNPay PAID và đơn COD DELIVERED? Thao tác này sẽ tính lại từ đầu.'
+                'Đồng bộ lại toàn bộ lượt bán từ đơn VNPay/QR ngân hàng PAID và đơn COD DELIVERED? Thao tác này sẽ tính lại từ đầu.'
             );
             if (!confirmed) return;
 

@@ -52,7 +52,7 @@ const reviewSchema = new mongoose.Schema({
     },
     paymentMethod: {
         type: String,
-        enum: ['COD', 'VNPAY'],
+        enum: ['COD', 'VNPAY', 'BANK_TRANSFER'],
         required: true
     },
     approved: {

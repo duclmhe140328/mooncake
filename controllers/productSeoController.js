@@ -647,7 +647,7 @@ function renderFooter() {
     <footer class="seo-footer">
         <div class="seo-footer-grid">
             <section>
-                <h3>Trung Thu Phố</h3>
+                <h3>Nét Hà Nội  </h3>
                 <p>
                     Điểm bán tuyển chọn bánh Trung Thu
                     Madame Hương và Maison tại Hà Nội.
@@ -675,7 +675,7 @@ function renderFooter() {
                     Hoàn Kiếm, Hà Nội
                 </p>
                 <p>
-                    Hotline: 08 1800 6466
+                    Hotline: +84 359 243 986
                 </p>
             </section>
         </div>
@@ -812,6 +812,9 @@ function renderCommerceModals() {
                             <option value="VNPAY">
                                 Thanh toán VNPay
                             </option>
+                            <option value="BANK_TRANSFER">
+                                Quét QR chuyển khoản ngân hàng
+                            </option>
                         </select>
                     </div>
 
@@ -868,7 +871,7 @@ function renderCommerceModals() {
     <div class="seo-floating-contact" aria-label="Liên hệ nhanh">
         <a
             class="seo-contact-zalo"
-            href="https://zalo.me/0818006466"
+            href="https://zalo.me/g/e7rzd391r56e5b66r2uz"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Nhắn Zalo chăm sóc khách hàng"
@@ -878,8 +881,8 @@ function renderCommerceModals() {
 
         <a
             class="seo-contact-hotline"
-            href="tel:0818006466"
-            aria-label="Gọi hotline 08 1800 6466"
+            href="tel:+84359243986"
+            aria-label="Gọi hotline +84 359 243 986"
         >
             <span class="seo-hotline-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24">
@@ -887,7 +890,7 @@ function renderCommerceModals() {
                 </svg>
             </span>
             <span class="seo-hotline-content">
-                <strong>08 1800 6466</strong>
+                <strong>+84 359 243 986</strong>
                 <small>Bấm gọi ngay</small>
             </span>
         </a>
@@ -1327,7 +1330,7 @@ ${renderHead({
                     <span>Đánh giá đã xác minh</span>
                     <h2>Khách hàng nói gì về sản phẩm</h2>
                     <p>
-                        Chỉ đơn VNPay đã thanh toán hoặc đơn COD đã được
+                        Chỉ đơn VNPay/QR ngân hàng đã thanh toán hoặc đơn COD đã được
                         xác nhận giao thành công mới có thể gửi đánh giá.
                     </p>
                 </header>
@@ -1386,7 +1389,7 @@ ${renderHead({
                                     name="phone"
                                     type="tel"
                                     inputmode="tel"
-                                    placeholder="VD: 0818006466"
+                                    placeholder="VD: +84359243986"
                                     autocomplete="tel"
                                     required
                                 >
